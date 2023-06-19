@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "133266154782",
+    "firebase_url": "https://finalprojectq-default-rtdb.firebaseio.com",
+    "project_id": "finalprojectq",
+    "storage_bucket": "finalprojectq.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133266154782:android:3ce1369040b33c5c3dd50f",
+        "android_client_info": {
+          "package_name": "com.example.indianyoutubefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133266154782-l059lve5ust8qf5o9sku306857r1qvou.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK5d9Sbod5rG80PZ4KxCY81o7eQsLn27A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133266154782-l059lve5ust8qf5o9sku306857r1qvou.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133266154782:android:7a7be9080d6ad57c3dd50f",
+        "android_client_info": {
+          "package_name": "com.example.upbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133266154782-l059lve5ust8qf5o9sku306857r1qvou.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK5d9Sbod5rG80PZ4KxCY81o7eQsLn27A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133266154782-l059lve5ust8qf5o9sku306857r1qvou.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
