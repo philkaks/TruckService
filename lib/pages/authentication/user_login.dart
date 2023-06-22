@@ -36,6 +36,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _adminid = TextEditingController();
+  final TextEditingController _plateno = TextEditingController();
 
   // getData(usercollection) async {
   //   FirebaseFirestore.instance
@@ -73,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   }),
                 ),
               );
-        } else if (selectedValue == 2) {
+        } else if (selectedValue == 2 && _plateno.text.isNotEmpty) {
           await Auth()
               .signInWithEmailAndPassword(
                 email: _controllerEmail.text.toString().trim(),
@@ -86,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   }),
                 ),
               );
-        } else if (selectedValue == 3) {
+        } else if (selectedValue == 3 && _adminid.text == "1234567890") {
           await Auth()
               .signInWithEmailAndPassword(
                 email: _controllerEmail.text.toString().trim(),
@@ -286,7 +288,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       selectedValue == 3
                           ? TextFormField(
-                              controller: _controllerPassword,
+                              controller: _adminid,
                               onEditingComplete: () {
                                 signInWithEmailAndPassword();
                               },
@@ -295,6 +297,29 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.key_outlined),
                                 labelText: "Admin Password",
+                                labelStyle: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 10,
+                              color: Colors.transparent,
+                            ),
+                            selectedValue == 2
+                          ? TextFormField(
+                              controller: _plateno,
+                              onEditingComplete: () {
+                                signInWithEmailAndPassword();
+                              },
+                              autocorrect: false,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.key_outlined),
+                                labelText: "plate number",
                                 labelStyle: const TextStyle(
                                   fontSize: 13,
                                 ),
