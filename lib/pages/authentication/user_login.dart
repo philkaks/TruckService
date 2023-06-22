@@ -5,6 +5,8 @@ import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/pages/authentication/user_register.dart';
 import 'package:upbox/services/auth.dart';
 
+// import '../intro-screens/dropdown.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -114,13 +116,16 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                           color: Colors.grey,
                         ),
-                      ),
+                      ),                      
+
                       Container(
-                        height: 55,
+                        height: 20,
                         color: Colors.transparent,
                       ),
                       _errorMessage(),
                       const SizedBox(height: 15),
+
+                      
                       TextFormField(
                         controller: _controllerEmail,
                         onEditingComplete: () {
@@ -183,9 +188,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text(
                               "Sign In",
                               style: TextStyle(

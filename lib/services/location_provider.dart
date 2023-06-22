@@ -62,10 +62,10 @@ class LocationProvider with ChangeNotifier {
         print(_locationPosition);
         _locationPosition!.latitude;
         _locationPosition!.longitude;
-
+// !changed ! to ?
         FirebaseFirestore.instance
             .collection('users')
-            .doc(Auth().currentUser!.uid)
+            .doc(Auth().currentUser?.uid)
             .update({
           "user_lat": _locationPosition!.latitude,
           "user_lng": _locationPosition!.longitude,
@@ -76,4 +76,4 @@ class LocationProvider with ChangeNotifier {
       return e;
     }
   }
-}
+ }

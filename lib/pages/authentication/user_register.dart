@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:upbox/pages/app_start.dart';
 // import 'package:upbox/pages/authentication/number_verification.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
+
+import '../driver.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,10 +18,17 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   String? errorMsg = '';
-
+  int selectedValue = 1;
+  String userType = 'users';
+  // i want to use the value of the dropdown button in the createUserWithEmailAndPassword() method
+  // final numberProvider = Provider<int>(create: (ref) => 1);
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _plateno = TextEditingController();
+  final TextEditingController _telno = TextEditingController();
+  final TextEditingController _adminid = TextEditingController();
+  final TextEditingController _city = TextEditingController();
 
   Future createUserWithEmailAndPassword() async {
     setState(() {
@@ -26,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
     });
     if (_name.text == '' || _email.text == '' || _password.text == '') {
       setState(() {
-        errorMsg = 'Please, one or more fields are emoty';
+        errorMsg = 'Please, one or more fields are empty';
       });
     } else {
       try {
@@ -73,19 +83,57 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     }
   }
+// i need to use the value of the dropdown button in the createUserWithEmailAndPassword() method
+  // Future createUserWithEmailAndPassword() async {
+  //   setState(() {
+  //     errorMsg = "Loading...please wait";
+  //   });
+  //   if (_name.text == '' || _email.text == '' || _password.text == '') {
+  //     setState(() {
 
-  Future addUserDetails(String username, String email, String password) async {
+  Future addUserDetails(
+    String username,
+    String email,
+    String password,
+  ) async {
     String? userId = FirebaseAuth.instance.currentUser?.uid;
-    await FirebaseFirestore.instance.collection('users').doc(userId).set({
-      'id': userId,
-      'username': username,
-      'email': email,
-      'password': password,
-      'phonenumber': 'unknown',
-      'phoneNumberVerification': false,
-      'user_lat': 'unknown',
-      'user_lng': 'unknown',
-    });
+    if (userType == 'users') {
+      await FirebaseFirestore.instance.collection(userType).doc(userId).set({
+        'id': userId,
+        'username': username,
+        'email': email,
+        'password': password,
+        'phonenumber': 'unknown',
+        'phoneNumberVerification': false,
+        'user_lat': 'unknown',
+        'user_lng': 'unknown',
+        'userType': 'users',
+      });
+    }
+    if (userType == 'drivers') {
+      await FirebaseFirestore.instance.collection(userType).doc(userId).set({
+        'id': userId,
+        'username': username,
+        'email': email,
+        'password': password,
+        'phoneNumberVerification': false,
+        'plateno': _plateno.text.toString().trim(),
+        'number': _telno.text.toString().trim(),
+        'state': _city.text.toString().trim(),
+        'driver_lat': 'unknown',
+        'driver_lng': 'unknown',
+        'userType': 'drivers',
+      });
+    } else if (userType == 'adminstrators') {
+      await FirebaseFirestore.instance.collection(userType).doc(userId).set({
+        'id': userId,
+        'username': username,
+        'email': email,
+        'password': password,
+        'adminid': _adminid.text.toString().trim(),
+        'userType': 'admin',
+      });
+    }
   }
 
   Widget _errorMessage() {
@@ -119,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 Container(
                   color: Colors.transparent,
-                  height: 140,
+                  height: 120,
                   // color: Colors.transparent,
                   child: Image.asset(
                     "images/top.png",
@@ -147,12 +195,44 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Colors.grey,
                         ),
                       ),
-                      Container(
-                        height: 35,
-                        color: Colors.transparent,
-                      ),
+                      // Container(
+                      //   height: 10,
+                      //   color: Colors.transparent,
+                      // ),
                       _errorMessage(),
-                      const SizedBox(height: 15),
+                      // THE drop down menu
+                      DropdownButton(
+                        hint: const Text("Select a user type"),
+                        value: selectedValue,
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 1,
+                            child: Text("USER"),
+                          ),
+                          DropdownMenuItem(
+                            value: 2,
+                            child: Text("DRIVER"),
+                          ),
+                          DropdownMenuItem(
+                              value: 3, child: Text("ADMINSTRATOR")),
+                        ],
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              selectedValue = value!;
+                              if (selectedValue == 1) {
+                                userType = "users";
+                              } else if (selectedValue == 2) {
+                                userType = "drivers";
+                              } else if (selectedValue == 3) {
+                                userType = "adminstrators";
+                              }
+                            },
+                          );
+                        },
+                      ),
 
                       TextFormField(
                         controller: _name,
@@ -214,6 +294,104 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                       ),
+                      if (selectedValue == 2)
+                        Column(
+                          children: [
+                            Container(
+                              height: 10,
+                              color: Colors.transparent,
+                            ),
+                            TextFormField(
+                              controller: _telno,
+                              onEditingComplete: () {
+                                FocusScope.of(context).nextFocus();
+                              },
+                              autocorrect: true,
+                              decoration: InputDecoration(
+                                labelText: "Telephone Number",
+                                prefixIcon:
+                                    const Icon(Icons.phone_android_outlined),
+                                labelStyle: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                              color: Colors.transparent,
+                            ),
+                            TextFormField(
+                              controller: _plateno,
+                              onEditingComplete: () {
+                                FocusScope.of(context).nextFocus();
+                              },
+                              autocorrect: true,
+                              decoration: InputDecoration(
+                                labelText: "Plate Number",
+                                prefixIcon:
+                                    const Icon(Icons.car_repair_outlined),
+                                labelStyle: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                              color: Colors.transparent,
+                            ),
+                            TextFormField(
+                              controller: _city,
+                              onEditingComplete: () {
+                                FocusScope.of(context).nextFocus();
+                              },
+                              autocorrect: true,
+                              decoration: InputDecoration(
+                                labelText: "City of Operation",
+                                prefixIcon:
+                                    const Icon(Icons.car_repair_outlined),
+                                labelStyle: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (selectedValue == 3)
+                        Column(
+                          children: [
+                            Container(
+                              height: 10,
+                              color: Colors.transparent,
+                            ),
+                            TextFormField(
+                              controller: _adminid,
+                              onEditingComplete: () {
+                                FocusScope.of(context).nextFocus();
+                              },
+                              autocorrect: true,
+                              decoration: InputDecoration(
+                                labelText: "Adminstrator ID",
+                                prefixIcon:
+                                    const Icon(Icons.phone_android_outlined),
+                                labelStyle: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       Container(
                         height: 40,
                         color: Colors.transparent,
@@ -222,6 +400,35 @@ class _RegisterPageState extends State<RegisterPage> {
                       ElevatedButton(
                         onPressed: () {
                           createUserWithEmailAndPassword();
+                          if (selectedValue == 1) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AppStart(),
+                              ),
+                            );
+                          } else if (selectedValue == 2) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Driver()),
+                            );
+                          } else if (selectedValue == 3) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Container(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            );
+                          }
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const LoginPage(),
+                          //   ),
+                          // );
                         },
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
@@ -238,9 +445,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Text(
                               "Continue",
                               style: TextStyle(
@@ -253,51 +460,51 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
 
                       // or sign up with a different account
-                      const SizedBox(height: 18),
-                      const Center(
-                        child: Text(
-                          "or",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 19,
-                          ),
-                        ),
-                      ),
+                      // const SizedBox(height: 18),
+                      // const Center(
+                      //   child: Text(
+                      //     "or",
+                      //     style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 19,
+                      //     ),
+                      //   ),
+                      // ),
 
-                      // sign up with google
-                      const SizedBox(height: 18),
-                      TextButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.all(20),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(color: Colors.black12),
-                            ),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "images/google.png",
-                              width: 18,
-                            ),
-                            const SizedBox(width: 19),
-                            const Text(
-                              "Sign up with Google",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                      // // sign up with google
+                      // const SizedBox(height: 18),
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   style: ButtonStyle(
+                      //     padding: MaterialStateProperty.all<EdgeInsets>(
+                      //       const EdgeInsets.all(20),
+                      //     ),
+                      //     shape:
+                      //         MaterialStateProperty.all<RoundedRectangleBorder>(
+                      //       RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(10.0),
+                      //         side: const BorderSide(color: Colors.black12),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Image.asset(
+                      //         "images/google.png",
+                      //         width: 18,
+                      //       ),
+                      //       const SizedBox(width: 19),
+                      //       const Text(
+                      //         "Sign up with Google",
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //         ),
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
 
                       // Already a user.
                       const SizedBox(height: 30),

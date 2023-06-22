@@ -1,11 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:upbox/pages/app_start.dart';
+import 'package:upbox/pages/authentication/user_login.dart';
+
+import 'pages/driver.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
-import 'package:upbox/pages/app_start.dart';
-import 'package:upbox/services/location_provider.dart';
-import 'package:upbox/services/widget_tree.dart';
+// import 'package:provider/provider.dart';
+// import 'package:upbox/pages/app_start.dart';
+// import 'package:upbox/services/location_provider.dart';
 
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -27,7 +31,7 @@ Future<void> main() async {
 
   // await dotenv.load(fileName: '.env');
   await Future.delayed(const Duration(seconds: 3));
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -40,28 +44,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => LocationProvider(),
-          child: const AppStart(),
-        ),
-
-        // ChangeNotifierProvider(
-        //   create: (context) => GoogleSignInProvider(),
-        //   child: const LoginPage(),
-        // )
-      ],
-      child: MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-          fontFamily: "Work_Sans",
-          brightness: Brightness.light,
-        ),
-        home: const WidgetTree(),
-        themeMode: ThemeMode.system,
-        debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+        fontFamily: "Work_Sans",
+        brightness: Brightness.light,
       ),
+      home: const Driver(),
+      // LoginPage(),
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
