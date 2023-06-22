@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -25,15 +26,33 @@ class _AppStartState extends State<AppStart> {
   // static LatLng sourceLocation = const LatLng(9.0301, 7.4677);
   // static LatLng destination = const LatLng(9.0398, 7.5044);
 
-  final LatLng _initialcameraposition = const LatLng(9.0765, 7.3986);
+  LatLng? initialcameraposition;
+  final List<Marker> _markers = <Marker>[];
 
   // final Location _location = Location();
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   // Provider.of<LocationProvider>(context, listen: false).initialization();
-  // }
+  void initState() {
+    super.initState();
+
+    getLocation();
+
+    // Provider.of<LocationProvider>(context, listen: false).initialization();
+  }
+
+  void getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    initialcameraposition = LatLng(position.latitude, position.longitude);
+    setState(() {
+      _markers.add(Marker(
+          markerId: const MarkerId('S'),
+          position: initialcameraposition!,
+          infoWindow: const InfoWindow(title: 'My Location')));
+    });
+    // return position;
+    // print('location: ${position.latitude}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +89,15 @@ class _AppStartState extends State<AppStart> {
               builder: (BuildContext context, BoxConstraints constraints) {
                 return SizedBox(
                   height: constraints.maxHeight,
-                  child: Container(color: Colors.amber,)
-                  // googleMapUI(),
+                  child:
+                      // Container(color: Colors.amber,)
+                      googleMapUI(),
                 );
               },
             ),
             DraggableScrollableSheet(
               expand: true,
-              initialChildSize: 0.41,
+              initialChildSize: 0.46,
               maxChildSize: 0.7,
               minChildSize: 0.1,
               builder:
@@ -154,14 +174,14 @@ class _AppStartState extends State<AppStart> {
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  side:
-                                      const BorderSide(color: Colors.transparent),
+                                  side: const BorderSide(
+                                      color: Colors.transparent),
                                 ),
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
                                   "Order a rider",
                                   style: TextStyle(
@@ -191,14 +211,14 @@ class _AppStartState extends State<AppStart> {
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  side:
-                                      const BorderSide(color: Colors.transparent),
+                                  side: const BorderSide(
+                                      color: Colors.transparent),
                                 ),
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Text(
                                   "Track a ride",
                                   style: TextStyle(
@@ -223,37 +243,21 @@ class _AppStartState extends State<AppStart> {
     );
   }
 
-  // Widget googleMapUI() {
-  //   return Consumer<LocationProvider>(
-  //     builder: (consumeContext, model, child) {
-  //       // ignore: unnecessary_null_comparison
-  //       if (model.locationPosition != null) {
-  //         return GoogleMap(
-  //           trafficEnabled: false,
-  //           myLocationButtonEnabled: false,
-  //           myLocationEnabled: true,
-  //           compassEnabled: false,
-  //           mapType: MapType.normal,
-  //           initialCameraPosition: CameraPosition(
-  //             target: model.locationPosition,
-  //             zoom: 15,
-  //           ),
-  //           // onMapCreated: (GoogleMapController _controller) {},
-  //         );
-  //       } else {
-  //         return Container(
-  //           color: Colors.white,
-  //           child: Column(
-  //             children: const [
-  //               Center(
-  //                 child: CircularProgressIndicator(),
-  //               ),
-  //               Text("Loading, please wait"),
-  //             ],
-  //           ),
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
+  Widget googleMapUI() {
+    // ignore: unnecessary_null_comparison
+
+    return GoogleMap(
+      trafficEnabled: false,
+      myLocationButtonEnabled: false,
+      myLocationEnabled: true,
+      compassEnabled: false,
+      markers: Set<Marker>.of(_markers),
+      mapType: MapType.normal,
+      initialCameraPosition: CameraPosition(
+        target: initialcameraposition!,
+        zoom: 25,
+      ),
+      onMapCreated: (GoogleMapController controller) {},
+    );
+  }
 }

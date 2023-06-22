@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                 password: _controllerPassword.text,
               )
               .then(
-                (value) => Navigator.of(context).push(
+                (value) => Navigator.push( context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return const Driver();
                   }),
@@ -95,7 +95,8 @@ class _LoginPageState extends State<LoginPage> {
                 password: _controllerPassword.text,
               )
               .then(
-                (value) => Navigator.of(context).push(
+                (value) => Navigator.push(
+                  context,
                   MaterialPageRoute(builder: (BuildContext context) {
                     return const AdminPage();
                   }),

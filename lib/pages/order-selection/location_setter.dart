@@ -32,6 +32,7 @@ class _LocSetState extends State<LocSet> {
       String country = data['country'];
       String region = data['regionName'];
       String city = data['city'];
+      // print(country + region + city);
 
       setState(() {
         countryName = country;

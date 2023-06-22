@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:upbox/pages/admin.dart';
+import 'package:upbox/pages/app_start.dart';
 // import 'package:upbox/pages/app_start.dart';
 
 import 'pages/authentication/user_login.dart';
 import 'pages/driver.dart';
+import 'pages/maps_screen.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:provider/provider.dart';
 // import 'package:upbox/pages/app_start.dart';
@@ -51,10 +53,16 @@ class _MyAppState extends State<MyApp> {
         fontFamily: "Work_Sans",
         brightness: Brightness.light,
       ),
-      home: const 
+      home: const MainScreen(
+        sourceLocationName: 'kampala',
+        destinationName: 'gulu',
+        cNAme: '',
+        sName: '',
+      ),
       // AdminPage(),
       //  Driver(),
-      LoginPage(),
+      // LoginPage(),
+      // AppStart(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
     );

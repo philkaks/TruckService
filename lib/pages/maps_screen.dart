@@ -75,18 +75,20 @@ class _MainScreenState extends State<MainScreen> {
         .where("id", isEqualTo: dId)
         .get()
         .then((value) {
-      dName = value.docs[0]['name'];
-      dPlate = value.docs[0]['plate_no'];
-      dRating = value.docs[0]['rating'];
-      dNumber = value.docs[0]['number'];
-      dArrived = value.docs[0]['driver_arrived'];
-      dRides = value.docs[0]['rides_count'];
+      setState(() {
+        dName = value.docs[0]['username'];
+        dPlate = value.docs[0]['plateno'];
+        dRating = value.docs[0]['rating'];
+        dNumber = value.docs[0]['number'];
+      });
+      // dArrived = value.docs[0]['driver_arrived'];
+      // dRides = value.docs[0]['rides_count'];
       dId = value.docs[0]['id'];
 
-      print("driver name: $dName");
-      print("driver number plate: $dPlate");
-      print("driver rating: $dRating");
-      print("driver id: $dId");
+      // print("driver name: $dName");
+      // print("driver number plate: $dPlate");
+      // print("driver rating: $dRating");
+      // print("driver id: $dId");
     });
   }
 
@@ -97,10 +99,10 @@ class _MainScreenState extends State<MainScreen> {
         .where("id", isEqualTo: dId)
         .get()
         .then((value) {
-      dGeo = value.docs[0]['driver_location'];
+      dGeo = value.docs[0]['driverLocation'];
       // dName = value.docs[0]['name'];
-      print("driver latitude: ${dGeo!.latitude}");
-      print("driver longitude: ${dGeo!.longitude}");
+      // print("driver latitude: ${dGeo!.latitude}");
+      // print("driver longitude: ${dGeo!.longitude}");
     });
   }
 
@@ -158,11 +160,11 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "$dRides ride(s)",
+                        "4 ride(s)",
                       )
                     ],
                   ),
@@ -451,320 +453,307 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       body: SafeArea(
-        child:
-        //  dName != null && dNumber != null && dPlate != null && dId != null
-        //     ?
-            //!asdfghjqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
-            Stack(
-                children: [
-                  LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return SizedBox(
-                        child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('drivers')
-                              .where("name", isEqualTo: dName)
-                              .where("number", isEqualTo: dNumber)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            var status =
-                                snapshot.data!.docs[0]['driver_arrived'];
-                            GeoPoint geopoint =
-                                snapshot.data!.docs[0]['driver_location'];
-                            if (status == "true" && !conditionMet) {
-                              FirebaseFirestore.instance
-                                  .collection('drivers')
-                                  .doc(dId!)
-                                  .update({
-                                "driver_free": "false",
-                              });
-                              drawRide();
-                              conditionMet = true;
-                            }
-                            if (status == "complete") {
-                              NotificationService().showNotification(
-                                  title: "Upbox", body: "Ride is complete");
-                              endRide();
-                            }
-                            return GoogleMap(
-                              compassEnabled: false,
-                              scrollGesturesEnabled: true,
-                              tiltGesturesEnabled: false,
-                              rotateGesturesEnabled: true,
-                              zoomControlsEnabled: false,
-                              zoomGesturesEnabled: false,
-                              markers: _markers,
-                              polylines: _polylines,
-                              mapType: MapType.normal,
-                              myLocationEnabled: false,
-                              myLocationButtonEnabled: false,
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(
-                                  geopoint.latitude,
-                                  geopoint.longitude,
-                                ),
-                                zoom: 15,
-                              ),
-                              onMapCreated:
-                                  (GoogleMapController controller) async {
-                                _controller.complete(controller);
-                              },
-                            );
-                          },
+          child:
+              //  dName != null && dNumber != null && dPlate != null && dId != null
+              //     ?
+              //!asdfghjqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+              Stack(
+        children: [
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return SizedBox(
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('drivers')
+                      .where("id", isEqualTo: dId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    // var status = snapshot.data!.docs[0]['driver_arrived'];
+                    GeoPoint geopoint =
+                        snapshot.data!.docs[0]['driverLocation'];
+                    // if (status == "true" && !conditionMet) {
+                    //   FirebaseFirestore.instance
+                    //       .collection('drivers')
+                    //       .doc(dId!)
+                    //       .update({
+                    //     "driver_free": "false",
+                    //   });
+                    //   drawRide();
+                    //   conditionMet = true;
+                    // }
+                    // if (status == "complete") {
+                    //   NotificationService().showNotification(
+                    //       title: "Upbox", body: "Ride is complete");
+                    //   endRide();
+                    // }
+                    return GoogleMap(
+                      compassEnabled: false,
+                      scrollGesturesEnabled: true,
+                      tiltGesturesEnabled: false,
+                      rotateGesturesEnabled: true,
+                      zoomControlsEnabled: false,
+                      zoomGesturesEnabled: false,
+                      markers: _markers,
+                      polylines: _polylines,
+                      mapType: MapType.normal,
+                      myLocationEnabled: false,
+                      myLocationButtonEnabled: false,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(
+                          snapshot.data!.docs[0]['driverLocation'][0],
+                          snapshot.data!.docs[0]['driverLocation'][1],
                         ),
-                      );
-                    },
+                        zoom: 15,
+                      ),
+                      onMapCreated: (GoogleMapController controller) async {
+                        _controller.complete(controller);
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          DraggableScrollableSheet(
+            initialChildSize: 0.5,
+            minChildSize: 0.2,
+            maxChildSize: 0.5,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return SingleChildScrollView(
+                controller: scrollController,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(15, 0, 0, 0),
+                        blurRadius: 12,
+                        spreadRadius: 0,
+                      )
+                    ],
                   ),
-                  DraggableScrollableSheet(
-                    initialChildSize: 0.2,
-                    minChildSize: 0.2,
-                    maxChildSize: 0.42,
-                    builder: (BuildContext context,
-                        ScrollController scrollController) {
-                      return SingleChildScrollView(
-                        controller: scrollController,
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: const Color.fromARGB(255, 199, 199, 199),
+                        ),
+                      ),
+                      const SizedBox(height: 19),
+
+                      // 1st part start
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(
+                              top: 5,
+                              bottom: 5,
+                              left: 12,
+                              right: 12,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromARGB(15, 0, 0, 0),
-                                blurRadius: 12,
-                                spreadRadius: 0,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(100, 237, 237, 237),
+                            ),
+                            child: Text(
+                              dPlate.toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 23,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                child: Icon(
+                                  Icons.currency_pound_outlined,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              Text(
+                                price.toString(),
+                                style: const TextStyle(
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+
+                      // 2nd Part
+                      const SizedBox(height: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: showDriverDetails,
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                      100,
+                                      237,
+                                      237,
+                                      237,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: const Icon(Icons.person),
+                                ),
+                              ),
+                              Text(
+                                dName.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.orange,
+                                    size: 12,
+                                  ),
+                                  Text(dRating.toString()),
+                                ],
                               )
                             ],
                           ),
-                          child: Column(
+                          Column(
                             children: [
-                              Container(
-                                width: 60,
-                                height: 7,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color:
-                                      const Color.fromARGB(255, 199, 199, 199),
+                              GestureDetector(
+                                onTap: showReportRider,
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                        100, 237, 237, 237),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child:
+                                      const Icon(Icons.bike_scooter_outlined),
                                 ),
                               ),
-                              const SizedBox(height: 19),
-
-                              // 1st part start
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(
-                                      top: 5,
-                                      bottom: 5,
-                                      left: 12,
-                                      right: 12,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(100, 237, 237, 237),
-                                    ),
-                                    child: Text(
-                                      dPlate.toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 23,
-                                        letterSpacing: 2,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const SizedBox(
-                                        child: Icon(
-                                          Icons.currency_pound_outlined,
-                                          color: Colors.orange,
-                                        ),
-                                      ),
-                                      Text(
-                                        price.toString(),
-                                        style: const TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange,
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-
-                              // 2nd Part
-                              const SizedBox(height: 25),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: showDriverDetails,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                              100,
-                                              237,
-                                              237,
-                                              237,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          child: const Icon(Icons.person),
-                                        ),
-                                      ),
-                                      Text(
-                                        dName.toString(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.star,
-                                            color: Colors.orange,
-                                            size: 12,
-                                          ),
-                                          Text(dRating.toString()),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: showReportRider,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                100, 237, 237, 237),
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          child: const Icon(
-                                              Icons.bike_scooter_outlined),
-                                        ),
-                                      ),
-                                      const Text(
-                                        "Report rider",
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      // The text widget below is a space
-                                      const Text(""),
-                                    ],
-                                  )
-                                ],
-                              ),
-
-                              const SizedBox(height: 15),
-
-                              // third part
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      const Icon(
-                                        Icons.location_on,
-                                        color: Colors.red,
-                                      ),
-                                      Text(widget.sourceLocationName),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      const Icon(
-                                        Icons.delivery_dining_outlined,
-                                        color: Colors.orange,
-                                      ),
-                                      Text(widget.destinationName),
-                                    ],
-                                  )
-                                ],
-                              ),
-
-                              // Fourth part,
-                              const SizedBox(height: 15),
-                              ElevatedButton(
-                                onPressed: _showDialogCancelRide,
-                                style: ButtonStyle(
-                                  padding:
-                                      MaterialStateProperty.all<EdgeInsets>(
-                                    const EdgeInsets.all(10),
-                                  ),
-                                  // backgroundColor: MaterialStateProperty.all<Color>(),
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      Colors.transparent),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      side: const BorderSide(
-                                          color: Colors.transparent),
-                                    ),
-                                  ),
-                                  elevation: MaterialStateProperty.all(0),
-                                ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Cancel ride",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
+                              const Text(
+                                "Report rider",
+                                style: TextStyle(
+                                  fontSize: 17,
                                 ),
                               ),
+                              // The text widget below is a space
+                              const Text(""),
+                            ],
+                          )
+                        ],
+                      ),
 
-                              // ending||
+                      const SizedBox(height: 15),
+
+                      // third part
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Colors.red,
+                              ),
+                              Text(widget.sourceLocationName),
                             ],
                           ),
+                          Column(
+                            children: [
+                              const Icon(
+                                Icons.delivery_dining_outlined,
+                                color: Colors.orange,
+                              ),
+                              Text(widget.destinationName),
+                            ],
+                          )
+                        ],
+                      ),
+
+                      // Fourth part,
+                      const SizedBox(height: 15),
+                      ElevatedButton(
+                        onPressed: _showDialogCancelRide,
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.all(10),
+                          ),
+                          // backgroundColor: MaterialStateProperty.all<Color>(),
+                          shadowColor: MaterialStateProperty.all<Color>(
+                              Colors.transparent),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(color: Colors.transparent),
+                            ),
+                          ),
+                          elevation: MaterialStateProperty.all(0),
                         ),
-                      );
-                    },
-                  )
-                ],
-              )
-              // ? ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // : Center(
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         const CircularProgressIndicator(strokeWidth: 7),
-            //         const Text("Searching for rider please"),
-            //         const SizedBox(height: 18),
-            //         GestureDetector(
-            //           onTap: () {
-            //             Navigator.of(context).pop();
-            //           },
-            //           child: const Text(
-            //             "cancel search",
-            //             style: TextStyle(color: Colors.orange),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-      ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Cancel ride",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // ending||
+                    ],
+                  ),
+                ),
+              );
+            },
+          )
+        ],
+      )
+          // ? ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          // : Center(
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         const CircularProgressIndicator(strokeWidth: 7),
+          //         const Text("Searching for rider please"),
+          //         const SizedBox(height: 18),
+          //         GestureDetector(
+          //           onTap: () {
+          //             Navigator.of(context).pop();
+          //           },
+          //           child: const Text(
+          //             "cancel search",
+          //             style: TextStyle(color: Colors.orange),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          ),
     );
   }
 
