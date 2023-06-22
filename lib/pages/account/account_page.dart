@@ -21,7 +21,7 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   final User? user = Auth().currentUser;
 
-  void _showSignOut() {
+  void showSignOut() {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.noHeader,
@@ -332,7 +332,7 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                       // subtitle: const Text("logout of your account"),
                       onTap: () {
-                        _showSignOut();
+                        showSignOut();
                       },
                     )
                   ],

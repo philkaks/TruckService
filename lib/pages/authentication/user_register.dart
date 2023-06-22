@@ -7,6 +7,7 @@ import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
 
+import '../admin.dart';
 import '../driver.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -417,10 +418,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Container(
-                                  color: Colors.red,
-                                ),
-                              ),
+                                  builder: (context) => const AdminPage()),
                             );
                           }
                           // Navigator.push(

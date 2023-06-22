@@ -1,12 +1,14 @@
+// import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/account/edit_account.dart';
+import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/pages/intro-screens/onboarding_screen.dart';
 import 'package:upbox/services/auth.dart';
 import 'package:upbox/services/storage_service.dart';
@@ -20,20 +22,20 @@ class Driver extends StatefulWidget {
 
 class _Driver extends State<Driver> {
   final User? user = Auth().currentUser;
-
-  // void _showSignOut() {
-  //   AwesomeDialog(
-  //     context: context,
-  //     dialogType: DialogType.noHeader,
-  //     animType: AnimType.topSlide,
-  //     title: 'Confirm logout!',
-  //     desc: 'Are you sure you want to logout?',
-  //     btnOkOnPress: signOut,
-  //     btnOkColor: Colors.black,
-  //     btnCancelOnPress: () {},
-  //     btnCancelColor: const Color.fromARGB(255, 199, 199, 199),
-  //   ).show();
-  // }
+// final page = AccountPage();
+  void _showSignOut() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.noHeader,
+      animType: AnimType.topSlide,
+      title: 'Confirm logout!',
+      desc: 'Are you sure you want to logout?',
+      btnOkOnPress: signOut,
+      btnOkColor: Colors.black,
+      btnCancelOnPress: () {},
+      btnCancelColor: const Color.fromARGB(255, 199, 199, 199),
+    ).show();
+  }
 
   Future<void> signOut() async {
     Fluttertoast.showToast(
@@ -46,7 +48,7 @@ class _Driver extends State<Driver> {
           (value) => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) {
-                return const OnboardingScreen();
+                return const LoginPage();
               },
             ),
           ),
@@ -141,10 +143,23 @@ class _Driver extends State<Driver> {
           color: Colors.white,
           child: Column(
             children: [
-              const SizedBox(height: 50),
-              const Center(
+              const SizedBox(height: 20),
+              Center(
                 child: Column(
                   children: [
+                    Container(
+                      width: 150,
+                      height: 150,
+                      // color: const Color.fromARGB(255, 198, 197, 197),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                     // FutureBuilder(
                     //   future: storage.downloadUrl("$imageName"),
                     //   builder: (context, snapshot) {
@@ -238,13 +253,40 @@ class _Driver extends State<Driver> {
                     //     );
                     //   },
                     // ),
-                    Text(
-                      "user?.email ?? 'Loading...'",
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Drivers Name",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                       ),
                     ),
-                    SizedBox(height: 30),
+                    // const SizedBox(height: 30),
+                    const Text(
+                      "0770-423-412",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Status'),
+                        SizedBox(width: 10),
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 20,
+                        ),
+                      ],
+                    )
+                    // const Text(
+                    //   "0770-423-412",
+                    //   style: TextStyle(
+                    //     color: Colors.grey,
+                    //     fontSize: 12,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -309,13 +351,46 @@ class _Driver extends State<Driver> {
                     //     );
                     //   },
                     // ),
+
+                    const Divider(
+                      height: 10,
+                    ),
+                    // const Divider(
+                    //   height: 10,
+                    // ),
+                    ListTile(
+                      leading: const Icon(Icons.car_repair_outlined),
+                      title: const Text("Trips Made."),
+                      subtitle: const Text("5 trips "),
+                      trailing: const Text(
+                        "On-going trips: 0",
+                        style: TextStyle(color: Colors.green),
+                      ),
+                      onTap: () {},
+                    ),
                     const Divider(
                       height: 10,
                     ),
                     ListTile(
                       leading: const Icon(Icons.language),
-                      title: const Text("Language"),
-                      subtitle: const Text("English - US"),
+                      title: const Text("Number Plate"),
+                      subtitle: const Text("UBG 123A"),
+                      trailing: const Text('Address: Kampala'),
+                      onTap: () {},
+                    ),
+                    const Divider(
+                      height: 10,
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.email_outlined,
+                      ),
+                      title: const Text(
+                        "Email",
+                      ),
+                      subtitle: const Text(
+                        "phil@gmail.com",
+                      ),
                       onTap: () {},
                     ),
                     const Divider(
@@ -331,7 +406,18 @@ class _Driver extends State<Driver> {
                         style: TextStyle(fontSize: 19),
                       ),
                       // subtitle: const Text("logout of your account"),
-                      onTap: () {},
+                      onTap: () {
+                        // call the sign out function from accountpage
+                        _showSignOut();                  
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage() ,
+                          ),
+                        );
+                      
+                        
+                      },
                     )
                   ],
                 ),
