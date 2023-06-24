@@ -44,6 +44,8 @@ class _MainScreenState extends State<MainScreen> {
     getData();
     trackRide();
     getDis();
+    drawRide();
+    
     // getData().then((_) {
     //   trackRide();
     //   getDis();
@@ -301,12 +303,15 @@ class _MainScreenState extends State<MainScreen> {
 
   // int _polylineIdCounter = 1;
 
+// ? for drawing the polyline.
+
   Future<dynamic> drawRide() async {
     NotificationService()
         .showNotification(title: "Upbox", body: "Rider has arrived");
     var directions = await LocationService().getDirection(
-      widget.sourceLocationName.toString(),
-      widget.destinationName.toString(),
+      'kampala','entebbe'
+      // widget.sourceLocationName.toString(),
+      // widget.destinationName.toString(),
     );
     _goToPlace(
       directions['start_location']['lat'],
@@ -390,6 +395,7 @@ class _MainScreenState extends State<MainScreen> {
       );
     });
   }
+// ? for the polyline.
 
   void _setPolyline(List<PointLatLng> points) {
     const String polylineIdval = 'polyline_1';
@@ -468,9 +474,11 @@ class _MainScreenState extends State<MainScreen> {
                       .where("id", isEqualTo: dId)
                       .snapshots(),
                   builder: (context, snapshot) {
-                    // var status = snapshot.data!.docs[0]['driver_arrived'];
+                    // getting the location values from firebase.
                     GeoPoint geopoint =
                         snapshot.data!.docs[0]['driverLocation'];
+                    // add it to the list of markers
+
                     // if (status == "true" && !conditionMet) {
                     //   FirebaseFirestore.instance
                     //       .collection('drivers')
@@ -500,8 +508,8 @@ class _MainScreenState extends State<MainScreen> {
                       myLocationButtonEnabled: false,
                       initialCameraPosition: CameraPosition(
                         target: LatLng(
-                          snapshot.data!.docs[0]['driverLocation'][0],
-                          snapshot.data!.docs[0]['driverLocation'][1],
+                          geopoint.latitude,
+                          geopoint.longitude,
                         ),
                         zoom: 15,
                       ),
@@ -693,7 +701,7 @@ class _MainScreenState extends State<MainScreen> {
                       // Fourth part,
                       const SizedBox(height: 15),
                       ElevatedButton(
-                        onPressed: _showDialogCancelRide,
+                        onPressed: drawRide,
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all<EdgeInsets>(
                             const EdgeInsets.all(10),
