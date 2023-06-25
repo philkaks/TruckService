@@ -67,8 +67,8 @@ class LocationProvider with ChangeNotifier {
             .collection('users')
             .doc(Auth().currentUser?.uid)
             .update({
-          "user_lat": _locationPosition!.latitude,
-          "user_lng": _locationPosition!.longitude,
+          "user_lat": _locationPosition?.latitude,
+          "user_lng": _locationPosition?.longitude,
         });
         notifyListeners();
       });
