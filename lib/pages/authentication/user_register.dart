@@ -123,6 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'driver_lat': 'unknown',
         'driver_lng': 'unknown',
         'userType': 'drivers',
+        'trips': 0,
       });
     } else if (userType == 'adminstrators') {
       await FirebaseFirestore.instance.collection(userType).doc(userId).set({

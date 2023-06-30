@@ -29,7 +29,7 @@ class _OrderTypeState extends State<OrderType> {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: const Text(
-          "UpBox",
+          "TruckService",
           style: TextStyle(
             fontSize: 26,
           ),

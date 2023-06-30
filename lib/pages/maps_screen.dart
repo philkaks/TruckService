@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -102,13 +104,15 @@ class _MainScreenState extends State<MainScreen> {
                 .where("number_verified", isEqualTo: true)
                 .get()
                 .then((value) {
-              dName = value.docs[0]['name'];
-              dPlate = value.docs[0]['plateno'];
-              dRating = value.docs[0]['rating'];
-              dNumber = value.docs[0]['number'];
-              dArrived = value.docs[0]['driver_arrived'];
-              dRides = value.docs[0]['rides_count'];
-              dId = value.docs[0]['id'];
+              setState(() {
+                dName = value.docs[0]['name'];
+                dPlate = value.docs[0]['plateno'];
+                dRating = value.docs[0]['rating'];
+                dNumber = value.docs[0]['number'];
+                dArrived = value.docs[0]['driver_arrived'];
+                dRides = value.docs[0]['rides_count'];
+                dId = value.docs[0]['id'];
+              });
 
               // ptint all the values above
             }),
@@ -284,10 +288,12 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<dynamic> drawRide() async {
     NotificationService()
-        .showNotification(title: "Upbox", body: "Rider has arrived");
+        .showNotification(title: "TruckService", body: "Rider has arrived");
     var directions = await LocationService().getDirection(
-      'kampala',
-      'entebbe',
+      widget.sourceLocationName.toString(),
+      widget.destinationName.toString(),
+      // 'kampala',
+      // 'entebbe',
     );
     _goToPlace(
       directions['start_location']['lat'],
@@ -306,7 +312,7 @@ class _MainScreenState extends State<MainScreen> {
     );
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(48, 48)),
-      'images/custom-icon.png',
+      'images/locationpin.png',
     );
     Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
       driverGeo();
@@ -344,7 +350,7 @@ class _MainScreenState extends State<MainScreen> {
     _polylines.clear();
     _markers.clear();
     Fluttertoast.showToast(
-      msg: "Upbox ride canceled",
+      msg: "TruckService ride canceled",
       gravity: ToastGravity.TOP,
       backgroundColor: Colors.black,
       textColor: Colors.white,
@@ -381,7 +387,7 @@ class _MainScreenState extends State<MainScreen> {
       Polyline(
         polylineId: const PolylineId(polylineIdval),
         width: 6,
-        color: Colors.orange,
+        color: Colors.red,
         points: points
             .map(
               (point) => LatLng(point.latitude, point.longitude),
@@ -396,8 +402,8 @@ class _MainScreenState extends State<MainScreen> {
 
   getDis() async {
     var directions = await LocationService().getDirection(
-      'kampala',
-      'entebbe',
+      widget.sourceLocationName.toString(),
+      widget.destinationName.toString(),
     );
     setState(() {
       km = directions['distance_km']['text'].toString();
@@ -429,7 +435,7 @@ class _MainScreenState extends State<MainScreen> {
         centerTitle: true,
         elevation: 0,
         title: const Text(
-          "Upbox",
+          "TruckService",
           style: TextStyle(fontSize: 25),
         ),
         actions: [
@@ -462,6 +468,13 @@ class _MainScreenState extends State<MainScreen> {
                               .where("number", isEqualTo: dNumber)
                               .snapshots(),
                           builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return const Text('No data available');
+                            }
                             var status = snapshot.data!.docs[0]
                                     ['driver_arrived'] ??
                                 false;
@@ -480,7 +493,8 @@ class _MainScreenState extends State<MainScreen> {
                             }
                             if (status == "complete") {
                               NotificationService().showNotification(
-                                  title: "Upbox", body: "Ride is complete");
+                                  title: "TruckService",
+                                  body: "Ride is complete");
                               endRide();
                             }
                             return GoogleMap(
@@ -513,7 +527,7 @@ class _MainScreenState extends State<MainScreen> {
                     },
                   ),
                   DraggableScrollableSheet(
-                    initialChildSize: 0.2,
+                    initialChildSize: 0.4,
                     minChildSize: 0.2,
                     maxChildSize: 0.42,
                     builder: (BuildContext context,

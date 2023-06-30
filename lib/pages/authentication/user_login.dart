@@ -81,13 +81,10 @@ class _LoginPageState extends State<LoginPage> {
                 email: _controllerEmail.text.toString().trim(),
                 password: _controllerPassword.text,
               )
-              .then(
-                (value) => Navigator.push( context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return const Driver();
-                  }),
-                ),
-              );
+              .then((value) => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => const Driver())));
         } else if (selectedValue == 3 && _adminid.text == "1234567890") {
           await Auth()
               .signInWithEmailAndPassword(
@@ -310,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
                               height: 10,
                               color: Colors.transparent,
                             ),
-                            selectedValue == 2
+                      selectedValue == 2
                           ? TextFormField(
                               controller: _plateno,
                               onEditingComplete: () {

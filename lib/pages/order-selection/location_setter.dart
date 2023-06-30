@@ -96,7 +96,7 @@ class _LocSetState extends State<LocSet> {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: const Text(
-          "UpBox",
+          "TruckService",
           style: TextStyle(
             fontSize: 26,
           ),
