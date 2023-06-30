@@ -61,48 +61,91 @@ class LocationService {
   //   print(results);
   //   return results;
   // }
+  // Future<Map<String, dynamic>> getDirection(
+  //   String origin,
+  //   String destination,
+  // ) async {
+  //   final String url =
+  //       "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$key";
+
+  //   var response = await http.get(Uri.parse(url));
+  //   var json = convert.jsonDecode(response.body);
+
+  //   if (json['routes'] == null || json['routes'].isEmpty) {
+  //     throw Exception('No routes found.');
+  //   }
+
+  //   var route = json['routes'][0];
+  //   var legs = route['legs'];
+
+  //   if (legs == null || legs.isEmpty) {
+  //     throw Exception('No legs found.');
+  //   }
+
+  //   var leg = legs[0];
+
+  //   var results = {
+  //     'distance_km': leg['distance'],
+  //     'bounds_ne': route['bounds']['northeast'],
+  //     'bounds_sw': route['bounds']['southwest'],
+  //     'start_location': leg['start_location'],
+  //     'end_location': leg['end_location'],
+  //     'polyline': route['overview_polyline']['points'],
+  //     'polyline_decoded':
+  //         PolylinePoints().decodePolyline(route['overview_polyline']['points']),
+  //   };
+
+  //   print(results);
+
+  //   List<PointLatLng> polylineDecoded = results['polyline_decoded'];
+  //   for (var point in polylineDecoded) {
+  //     print('Latitude: ${point.latitude}, Longitude: ${point.longitude}');
+  //   }
+
+  //   return results;
+  // }
+
   Future<Map<String, dynamic>> getDirection(
-    String origin,
-    String destination,
-  ) async {
+      String origin, String destination) async {
     final String url =
         "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=$key";
 
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
 
-    if (json['routes'] == null || json['routes'].isEmpty) {
-      throw Exception('No routes found.');
+    if (json['status'] == 'OK' &&
+        json['routes'] != null &&
+        json['routes'].isNotEmpty) {
+      var route = json['routes'][0];
+      var legs = route['legs'];
+
+      if (legs != null && legs.isNotEmpty) {
+        var leg = legs[0];
+
+        var results = {
+          'distance_km': leg['distance'],
+          'bounds_ne': route['bounds']['northeast'],
+          'bounds_sw': route['bounds']['southwest'],
+          'start_location': leg['start_location'],
+          'end_location': leg['end_location'],
+          'polyline': route['overview_polyline']['points'],
+          'polyline_decoded': PolylinePoints()
+              .decodePolyline(route['overview_polyline']['points']),
+        };
+
+        print(results);
+
+        List<PointLatLng> polylineDecoded = results['polyline_decoded'];
+        for (var point in polylineDecoded) {
+          print('Latitude: ${point.latitude}, Longitude: ${point.longitude}');
+        }
+
+        return results;
+      }
     }
 
-    var route = json['routes'][0];
-    var legs = route['legs'];
-
-    if (legs == null || legs.isEmpty) {
-      throw Exception('No legs found.');
-    }
-
-    var leg = legs[0];
-
-    var results = {
-      'distance_km': leg['distance'],
-      'bounds_ne': route['bounds']['northeast'],
-      'bounds_sw': route['bounds']['southwest'],
-      'start_location': leg['start_location'],
-      'end_location': leg['end_location'],
-      'polyline': route['overview_polyline']['points'],
-      'polyline_decoded':
-          PolylinePoints().decodePolyline(route['overview_polyline']['points']),
-    };
-
-    print(results);
-
-    List<PointLatLng> polylineDecoded = results['polyline_decoded'];
-    for (var point in polylineDecoded) {
-      print('Latitude: ${point.latitude}, Longitude: ${point.longitude}');
-    }
-
-    return results;
+    throw Exception('No routes found.');
   }
+
 
 }

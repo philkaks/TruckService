@@ -2,17 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:upbox/pages/admin.dart';
-import 'package:upbox/pages/app_start.dart';
-// import 'package:upbox/pages/app_start.dart';
-
-import 'pages/authentication/user_login.dart';
-import 'pages/driver.dart';
 import 'pages/maps_screen.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:provider/provider.dart';
-// import 'package:upbox/pages/app_start.dart';
-// import 'package:upbox/services/location_provider.dart';
+
 
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -56,8 +47,8 @@ class _MyAppState extends State<MyApp> {
       home: const MainScreen(
         sourceLocationName: 'kampala',
         destinationName: 'gulu',
-        cNAme: '',
-        sName: '',
+        cNAme: 'Uganda',
+        // sName: '',
       ),
       // AdminPage(),
       //  Driver(),
@@ -68,3 +59,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+// ? test if the API works.
+// https://maps.googleapis.com/maps/api/directions/json?origin=kampala&destination=gulu&key=AIzaSyAAdIxyR8uIlf95cQvjONiX2f3U6IUBUpk
