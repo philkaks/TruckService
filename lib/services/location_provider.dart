@@ -1,84 +1,3 @@
-// // ignore_for_file: no_leading_underscores_for_local_identifiers
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:location/location.dart';
-// import 'package:upbox/services/auth.dart';
-
-// class LocationProvider with ChangeNotifier {
-//   Location? _location;
-//   Location get location => _location!;
-
-//   LatLng? _locationPosition;
-
-//   LatLng get locationPosition => _locationPosition!;
-//   // // ! this a constant location change it later to get the actual cordinates of the user.
-//   // const LatLng(
-//   //   3.028086,
-//   //   30.910002,
-//   // );
-
-//   bool locationServiceActive = true;
-
-//   LocationProvider() {
-//     _location = Location();
-//   }
-
-//   initialization() async {
-//     await getUserLocation();
-//   }
-
-//   getUserLocation() async {
-//     try {
-//       bool _serviceEnabled;
-//       PermissionStatus _permissionGranted;
-
-//       _serviceEnabled = await location.serviceEnabled();
-
-//       if (!_serviceEnabled) {
-//         _serviceEnabled = await location.requestService();
-
-//         if (!_serviceEnabled) {
-//           return;
-//         }
-//       }
-
-//       _permissionGranted = await location.hasPermission();
-//       if (_permissionGranted == PermissionStatus.denied) {
-//         _permissionGranted = await location.requestPermission();
-//         if (_permissionGranted != PermissionStatus.granted) {
-//           return;
-//         }
-//       }
-
-//       location.onLocationChanged.listen((LocationData currentLocation) {
-//         _locationPosition = LatLng(
-//           currentLocation.latitude!,
-//           currentLocation.longitude!,
-//         );
-
-//         // ignore: avoid_print
-//         print(_locationPosition);
-//         _locationPosition!.latitude;
-//         _locationPosition!.longitude;
-// // !changed ! to ?
-//         FirebaseFirestore.instance
-//             .collection('users')
-//             .doc(Auth().currentUser?.uid)
-//             .update({
-//           "user_lat": _locationPosition?.latitude,
-//           "user_lng": _locationPosition?.longitude,
-//         });
-//         notifyListeners();
-//       });
-//     } catch (e) {
-//       return e;
-//     }
-//   }
-//  }
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -87,11 +6,11 @@ import 'package:upbox/services/auth.dart';
 
 class LocationProvider with ChangeNotifier {
   Location? _location;
-  Location get location => _location!;
+  Location get location => _location !;
 
   LatLng? _locationPosition;
 
-  LatLng get locationPosition => _locationPosition!;
+  LatLng get locationPosition => _locationPosition ?? LatLng(0, 0);
 
   bool locationServiceActive = true;
 
@@ -105,31 +24,31 @@ class LocationProvider with ChangeNotifier {
 
   getUserLocation() async {
     try {
-      bool _serviceEnabled;
-      PermissionStatus _permissionGranted;
+      bool serviceEnabled;
+      PermissionStatus permissionGranted;
 
-      _serviceEnabled = await location.serviceEnabled();
+      serviceEnabled = await location.serviceEnabled();
 
-      if (!_serviceEnabled) {
-        _serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
 
-        if (!_serviceEnabled) {
+        if (!serviceEnabled) {
           return;
         }
       }
 
-      _permissionGranted = await location.hasPermission();
-      if (_permissionGranted == PermissionStatus.denied) {
-        _permissionGranted = await location.requestPermission();
-        if (_permissionGranted != PermissionStatus.granted) {
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
           return;
         }
       }
 
       location.onLocationChanged.listen((LocationData currentLocation) {
         _locationPosition = LatLng(
-          currentLocation.latitude ?? 0.0,
-          currentLocation.longitude ?? 0.0,
+          currentLocation.latitude!,
+          currentLocation.longitude!,
         );
 
         // ignore: avoid_print

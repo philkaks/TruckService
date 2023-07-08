@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/account/account_page.dart';
 import 'package:upbox/services/auth.dart';
-import 'package:upbox/services/storage_service.dart';
+
+import '../pages/authentication/user_login.dart';
 
 // ignore: must_be_immutable
 class MyDrawer extends StatelessWidget {
@@ -15,21 +16,21 @@ class MyDrawer extends StatelessWidget {
   CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  final Storage storage = Storage();
+  // final Storage storage = Storage();
 
   // ignore: prefer_typing_uninitialized_variables
   var imageName;
-  getImage() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .where('id', isEqualTo: user!.uid)
-        .get()
-        .then((value) {
-      imageName = value.docs[0]['image_url'];
+  // getImage() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .where('id', isEqualTo: user!.uid)
+  //       .get()
+  //       .then((value) {
+  //     imageName = value.docs[0]['image_url'];
 
-      debugPrint('image url is :  $imageName');
-    });
-  }
+  //     debugPrint('image url is :  $imageName');
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class MyDrawer extends StatelessWidget {
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
-                  getImage();
+                  // getImage();
                   var name = snapshot.data!.docs[0]['username'].toString();
                   return Text(
                     name,
@@ -65,39 +66,44 @@ class MyDrawer extends StatelessWidget {
               },
             ),
             accountEmail: Text(user?.email ?? 'Loading...'),
-            currentAccountPicture: FutureBuilder(
-              future: storage.downloadUrl("$imageName"),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  const CircleAvatar(
+            currentAccountPicture:   const CircleAvatar(
                     child: ClipOval(
                       child: Icon(Icons.person),
                     ),
-                  );
-                } else if (snapshot.hasData) {
-                  return CircleAvatar(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: NetworkImage(snapshot.data!),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                return const CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 225, 225, 225),
-                  child: ClipOval(
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.black,
-                    ),
                   ),
-                );
-              },
-            ),
+            // currentAccountPicture: FutureBuilder(
+            //   future: storage.downloadUrl("$imageName"),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasError) {
+                  // const CircleAvatar(
+                  //   child: ClipOval(
+                  //     child: Icon(Icons.person),
+                  //   ),
+                  // );
+            //     } else if (snapshot.hasData) {
+            //       return CircleAvatar(
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             shape: BoxShape.circle,
+            //             image: DecorationImage(
+            //               image: NetworkImage(snapshot.data!),
+            //               fit: BoxFit.fill,
+            //             ),
+            //           ),
+            //         ),
+            //       );
+            //     }
+            //     return const CircleAvatar(
+            //       backgroundColor: Color.fromARGB(255, 225, 225, 225),
+            //       child: ClipOval(
+            //         child: Icon(
+            //           Icons.person,
+            //           color: Colors.black,
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // ),
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
@@ -130,7 +136,18 @@ class MyDrawer extends StatelessWidget {
                 fontSize: 17,
               ),
             ),
-            onTap: () {},
+            onTap: () async {
+              // temporary
+              await Auth().signOut().then(
+                    (value) => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return const LoginPage();
+                        },
+                      ),
+                    ),
+                  );
+            },
           )
         ],
       ),

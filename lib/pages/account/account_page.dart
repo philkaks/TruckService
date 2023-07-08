@@ -1,6 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +8,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/account/edit_account.dart';
 import 'package:upbox/pages/intro-screens/onboarding_screen.dart';
 import 'package:upbox/services/auth.dart';
-import 'package:upbox/services/storage_service.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -73,30 +71,32 @@ class _AccountPageState extends State<AccountPage> {
 
   // ignore: prefer_typing_uninitialized_variables
   var imageName;
-  getImage() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .where('id', isEqualTo: user!.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        imageName = value.docs[0]['image_url'];
-      });
+  
+  
+  // getImage() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .where('id', isEqualTo: user!.uid)
+  //       .get()
+  //       .then((value) {
+  //     setState(() {
+  //       imageName = value.docs[0]['image_url'];
+  //     });
 
-      debugPrint('image url is :  $imageName');
-    });
-  }
+  //     debugPrint('image url is :  $imageName');
+  //   });
+  // }
 
   CollectionReference usersCollection =
       FirebaseFirestore.instance.collection("users");
 
-  final Storage storage = Storage();
+  // final Storage storage = Storage();
 
-  @override
-  void initState() {
-    getImage();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // getImage();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,66 +145,69 @@ class _AccountPageState extends State<AccountPage> {
               Center(
                 child: Column(
                   children: [
-                    FutureBuilder(
-                      future: storage.downloadUrl("$imageName"),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return IconButton(
-                            color: Colors.black,
-                            icon: const Icon(Icons.person),
-                            onPressed: () async {
-                              final result =
-                                  await FilePicker.platform.pickFiles(
-                                allowMultiple: false,
-                                type: FileType.custom,
-                                allowedExtensions: ['png', 'jpg'],
-                              );
+                    // FutureBuilder(
+                    //   future: storage.downloadUrl("$imageName"),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.hasError) {
+                    //       return
+                    IconButton(
+                      color: Colors.black,
+                      icon: const Icon(Icons.person),
+                      onPressed: () async {
+                        // final result =
+                        //     await FilePicker.platform.pickFiles(
+                        //   allowMultiple: false,
+                        //   type: FileType.custom,
+                        //   allowedExtensions: ['png', 'jpg'],
+                        // );
 
-                              if (result == null) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("No file selected"),
-                                  ),
-                                );
-                                // ignore: avoid_returning_null_for_void
-                                return null;
-                              }
+                        // if (result == null) {
+                        //   // ignore: use_build_context_synchronously
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(
+                        //       content: Text("No file selected"),
+                        //     ),
+                        //   );
+                        //   // ignore: avoid_returning_null_for_void
+                        //   return null;
+                        // }
 
-                              final path = result.files.single.path!;
-                              final fileName = result.files.single.name;
+                        // final path = result.files.single.path!;
+                        // final fileName = result.files.single.name;
 
-                              FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(user!.uid)
-                                  .update({'image_url': user!.uid + fileName});
-                              storage
-                                  .uploadFile(path, user!.uid + fileName)
-                                  .then((value) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Image saved successfully"),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-                              });
-                            },
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return Container(
+                        // FirebaseFirestore.instance
+                        //     .collection('users')
+                        //     .doc(user!.uid)
+                        //     .update({'image_url': user!.uid + fileName});
+                        // storage
+                        //     .uploadFile(path, user!.uid + fileName)
+                        //     .then((value) {
+                        //   // ignore: use_build_context_synchronously
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(
+                        //       content: Text("Image saved successfully"),
+                        //       backgroundColor: Colors.green,
+                        //     ),
+                        //   );
+                        // });
+                        //   },
+                        // );
+                        // } else if (snapshot.connectionState ==
+                        //     ConnectionState.waiting) {
+                        //   return const Center(
+                        //     child: CircularProgressIndicator(),
+                        //   );
+                        // }
+                        Container(
                           width: 75,
                           height: 75,
-                          color: const Color.fromARGB(255, 198, 197, 197),
-                          decoration: BoxDecoration(
+                          // color: const Color.fromARGB(255, 198, 197, 197),
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 198, 197, 197),
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: NetworkImage(snapshot.data!),
+                              image: NetworkImage(
+                                  'https://images.unsplash.com/photo-1688292667451-3a8945737a72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=391&q=80'),
                               fit: BoxFit.fill,
                             ),
                           ),

@@ -9,10 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:upbox/pages/account/edit_account.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/pages/intro-screens/onboarding_screen.dart';
 import 'package:upbox/services/auth.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'editdriver.dart';
 
 class Driver extends StatefulWidget {
   const Driver({super.key});
@@ -82,174 +84,196 @@ class _Driver extends State<Driver> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.dark,
-          ),
-          elevation: 0,
-          iconTheme: const IconThemeData(size: 30),
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          title: const Text(
-            "Driver's Account",
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  PageTransition(
-                    child: const EditAccount(),
-                    childCurrent: widget,
-                    type: PageTransitionType.fade,
-                    duration: const Duration(seconds: 0),
-                    reverseDuration: const Duration(seconds: 0),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.edit,
-                size: 20,
-              ),
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark,
         ),
-        body: SafeArea(
-          child: Container(
-            color: Colors.white,
-            child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: dataStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final data = snapshot.data!.data();
-                  if (data != null) {
-                    return Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        Center(
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 150,
-                                height: 150,
-                                // color: const Color.fromARGB(255, 198, 197, 197),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        data['image_url'].toString()),
-                                    fit: BoxFit.cover,
-                                  ),
+        elevation: 0,
+        iconTheme: const IconThemeData(size: 30),
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        title: const Text(
+          "Driver's Account",
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                PageTransition(
+                  child: const EditDriver(),
+                  childCurrent: widget,
+                  type: PageTransitionType.fade,
+                  duration: const Duration(seconds: 0),
+                  reverseDuration: const Duration(seconds: 0),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.edit,
+              size: 20,
+              color: Colors.green,
+            ),
+          )
+        ],
+      ),
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            stream: dataStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final data = snapshot.data!.data();
+                if (data != null) {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Center(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 150,
+                              // color: const Color.fromARGB(255, 198, 197, 197),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      data['image_url'].toString()),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-    
-                              const SizedBox(height: 10),
-                              Text(
-                                data['username'].toString(),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                              // const SizedBox(height: 30),
-                              Text(
-                                data['number'].toString(),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text('Status'),
-                                  const SizedBox(width: 10),
-                                  data['phoneNumberVerification']
-                                      ? const Icon(
-                                          Icons.check_circle,
-                                          color: Colors.green,
-                                          size: 20,
-                                        )
-                                      : const Icon(
-                                          Icons.cancel ,
-                                          color: Colors.red,
-                                          size: 20,
-                                        ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: [
-                              const Divider(
-                                height: 10,
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.car_repair_outlined),
-                                title: const Text("Trips Made."),
-                                subtitle: Text("${data['trips']} trips "),
-                                trailing: const Text(
-                                  "On-going trips: 0",
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                                onTap: () {},
-                              ),
-                              const Divider(
-                                height: 10,
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.language),
-                                title: const Text("Number Plate"),
-                                subtitle: Text("${data['plateno']}"),
-                                // trailing: Text('Address: '),
-                                onTap: () {},
-                              ),
-                              const Divider(
-                                height: 10,
-                              ),
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.email_outlined,
-                                ),
-                                title: const Text(
-                                  "Email",
-                                ),
-                                subtitle: Text(
-                                  data['email'].toString(),
-                                ),
-                                onTap: () {},
-                              ),
-                              const Divider(
-                                height: 10,
-                              ),
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.admin_panel_settings,
-                                ),
-                                title: const Text(
-                                  "Contact Admin",
-                                ),
-                                subtitle: Text(
-                                  'Contact the admin for any issues',
-                                ),
-                                onTap: () {
-                                  
+                            ),
 
-                                },
+                            const SizedBox(height: 10),
+                            Text(
+                              data['username'].toString(),
+                              style: const TextStyle(
+                                fontSize: 20,
                               ),
-                              const Divider(
-                                height: 10,
+                            ),
+                            // const SizedBox(height: 30),
+                            Text(
+                              data['number'].toString(),
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
                               ),
-                              ListTile(
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Status'),
+                                const SizedBox(width: 10),
+                                data['phoneNumberVerification']
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                        size: 20,
+                                      )
+                                    : const Icon(
+                                        Icons.cancel,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            const Divider(
+                              height: 10,
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.car_repair_outlined,
+                                color: Colors.blue,
+                              ),
+                              title: const Text("Trips Made."),
+                              subtitle: Text("${data['trips']} trips "),
+                              trailing: const Text(
+                                "On-going trips: none",
+                                style: TextStyle(color: Colors.green),
+                              ),
+                              onTap: () {},
+                            ),
+                            const Divider(
+                              height: 10,
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.card_membership,
+                                color: Colors.blue,
+                              ),
+                              title: const Text("Number Plate"),
+                              subtitle: Text("${data['plateno']}"),
+                              // trailing: Text('Address: '),
+                              onTap: () {},
+                            ),
+                            const Divider(
+                              height: 10,
+                            ),
+                            ListTile(
+                              leading: const Icon(
+                                Icons.email_outlined,
+                                color: Colors.blue,
+                              ),
+                              title: const Text(
+                                "Email",
+                              ),
+                              subtitle: Text(
+                                data['email'].toString(),
+                              ),
+                              onTap: () {},
+                            ),
+                            const Divider(
+                              height: 10,
+                            ),
+                            ListTile(
+                              trailing: const Icon(
+                                Icons.phone,
+                                color: Colors.blue,
+                              ),
+                              leading: const Icon(
+                                Icons.admin_panel_settings,
+                                color: Colors.green,
+                              ),
+                              title: const Text(
+                                "Contact Admin",
+                              ),
+                              subtitle: const Text(
+                                'Contact the admin for any issues',
+                              ),
+                              onTap: () async {
+                                Uri phoneDr = Uri.parse(
+                                  'tel:+256 770 429 423',
+                                );
+
+                                if (await launchUrl(phoneDr)) {
+                                  debugPrint("Phone number is okay");
+                                } else {
+                                  debugPrint('phone number errror');
+                                }
+                              },
+                            ),
+                            const Divider(
+                              height: 10,
+                            ),
+                            Container(
+                              color: Colors.red[50],
+                              child: ListTile(
                                 leading: const Icon(
                                   Icons.login_outlined,
                                   size: 21,
+                                  color: Colors.red,
                                 ),
                                 trailing: IconButton(
                                     onPressed: () {
@@ -262,8 +286,14 @@ class _Driver extends State<Driver> {
                                     )),
                                 title: const Text(
                                   "Log - out",
-                                  style:
-                                      TextStyle(fontSize: 19, color: Colors.red),
+                                  style: TextStyle(
+                                      fontSize: 19, color: Colors.red),
+                                ),
+                                subtitle: const Text(
+                                  'Log out of your account',
+                                  // style: TextStyle(
+                                  //   color: Colors,
+                                  // ),
                                 ),
                                 onTap: () {
                                   _showAction('Confirm logout!', signOut);
@@ -274,17 +304,17 @@ class _Driver extends State<Driver> {
                                     ),
                                   );
                                 },
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  }
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  );
                 }
-                return const CircularProgressIndicator(); // Show a loading indicator while data is being fetched
-              },
-            ),
+              }
+              return const CircularProgressIndicator(); // Show a loading indicator while data is being fetched
+            },
           ),
         ),
       ),

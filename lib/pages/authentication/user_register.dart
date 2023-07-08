@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -400,27 +401,37 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       ElevatedButton(
                         onPressed: () {
-                          createUserWithEmailAndPassword();
-                          if (selectedValue == 1) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AppStart(),
-                              ),
-                            );
-                          } else if (selectedValue == 2) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Driver()),
-                            );
-                          } else if (selectedValue == 3) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AdminPage()),
-                            );
-                          }
+                          createUserWithEmailAndPassword().then((value){
+
+                             if (selectedValue == 1 ) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AppStart(),
+                                ),
+                              );
+                            } else if (selectedValue == 2) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Driver()),
+                              );
+                            } else if (selectedValue == 3) {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const AdminPage()),
+                              // );
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AdminPage()),
+                                (Route<dynamic> route) => false,
+                              );
+                            }
+
+                          });
+                         
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(

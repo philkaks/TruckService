@@ -65,19 +65,31 @@ class _LocSetState extends State<LocSet> {
     if (response.statusCode == 200) {
       final places = json.decode(response.body);
 
-      var result = {
-        'places_prediction1': places['predictions'][0]['description'],
-        'places_prediction2': places['predictions'][1]['description'],
-        'places_prediction3': places['predictions'][2]['description'] ?? '',
-        'places_prediction4': places['predictions'][3]['description'] ?? '',
-      };
+      // var result = {
+      //   'places_prediction1': places['predictions'][0]['description'],
+      //   'places_prediction2': places['predictions'][1]['description'],
+      //   'places_prediction3': places['predictions'][2]['description'] ?? '',
+      //   'places_prediction4': places['predictions'][3]['description'] ?? '',
+      // };
+      if (places['predictions'].length > 0) {
+        var result = {
+          'places_prediction1': places['predictions'][0]['description'],
+          'places_prediction2': places['predictions'][1]['description'],
+          'places_prediction3': places['predictions'][2]['description'] ?? '',
+          'places_prediction4': places['predictions'][3]['description'] ?? '',
+        };
+
+        print(result);
+      } else {
+        print('No predictions found');
+      }
 
       // setState(() {
       //   placeList = result;
       // });
 
       // ignore: avoid_print
-      print(result);
+      // print(result);
     } else {
       throw Exception('Failed to load predictions');
     }

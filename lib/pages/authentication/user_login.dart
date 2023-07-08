@@ -91,14 +91,11 @@ class _LoginPageState extends State<LoginPage> {
                 email: _controllerEmail.text.toString().trim(),
                 password: _controllerPassword.text,
               )
-              .then(
-                (value) => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                    return const AdminPage();
-                  }),
-                ),
-              );
+              .then((value) => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AdminPage()),
+                    (Route<dynamic> route) => false,
+                  ));
         } else {
           setState(() {
             errorMessage = 'Please, select a correct user type';

@@ -64,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
   driverGeo() async {
     FirebaseFirestore.instance
         .collection('drivers')
-        .where("id", isEqualTo: dId)
+        // .where("id", isEqualTo: dId)
         .get()
         .then((value) {
       dGeo = value.docs[0]['driverLocation'];
