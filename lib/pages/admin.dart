@@ -57,213 +57,247 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Admin Page')),
-        backgroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            width: 150,
-            height: 150,
-            // color: const Color.fromARGB(255, 198, 197, 197),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80'),
-                fit: BoxFit.cover,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Center(
+              child: Text(
+            'Admin Page',
+            style: TextStyle(color: Colors.black),
+          )),
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+              onPressed: _showSignOut,
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.red,
               ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 40,
-                width: 70,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      const Center(child: Text('Users')),
-                      Positioned(
-                        top: -4,
-                        right: -2,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            '5',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+          ],
+        ),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: 150,
+              height: 150,
+              // color: const Color.fromARGB(255, 198, 197, 197),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(
+                      'https://images.unsplash.com/photo-1550439062-609e1531270e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 40,
+                  width: 70,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        const Center(child: Text('Users')),
+                        Positioned(
+                          top: -4,
+                          right: -2,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              '5',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              SizedBox(
-                height: 40,
-                width: 70,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      const Center(child: Text('Drivers')),
-                      Positioned(
-                        top: -4,
-                        right: -2,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            numberofdrivers.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                const SizedBox(
+                  width: 20,
+                ),
+                SizedBox(
+                  height: 40,
+                  width: 70,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        const Center(child: Text('Drivers')),
+                        Positioned(
+                          top: -4,
+                          right: -2,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              numberofdrivers.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-
-          const SizedBox(
-            height: 20,
-          ),
-          const Center(
-            child: Text(
-              'Drivers Available',
-              style: TextStyle(fontSize: 20),
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          // this creates the widget 10 times.
-          Expanded(
-            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream:
-                  FirebaseFirestore.instance.collection('drivers').snapshots(),
-              builder: (context, snapshot) {
-                // numberofdrivers = snapshot.data!.size;
-                // print(numberofdrivers);
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
+            const SizedBox(
+              height: 10,
+            ),
+            // text button
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Read Reviews',
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            const Center(
+              child: Text(
+                'Drivers Available',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // this creates the widget 10 times.
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection('drivers')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  // numberofdrivers = snapshot.data!.size;
+                  // print(numberofdrivers);
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox(
                       width: 20,
                       height: 20,
-                      child: CircularProgressIndicator());
-                }
-
-                final List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                    snapshot.data!.docs;
-                numberofdrivers = documents.length;
-
-                return ListView.builder(
-                  itemCount: documents.length,
-                  itemBuilder: (context, index) {
-                    final document = documents[index];
-                    final Map<String, dynamic> data = document.data()!;
-
-                    return Card(
-                      child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(data['image_url']),
-                          ),
-                          title: Text(data['username'],
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                          subtitle: Text(data['number']),
-                          trailing: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              data['phoneNumberVerification']
-                                  ? const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    )
-                                  : const Icon(
-                                      Icons.cancel,
-                                      color: Colors.red,
-                                    ),
-                              Text(
-                                data['phoneNumberVerification']
-                                    ? 'Verified'
-                                    : 'Not Verified',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                    color: data['phoneNumberVerification']
-                                        ? Colors.green
-                                        : Colors.red),
-                              ),
-                            ],
-                          )
-                          // Add more widgets to display other document fields as needed
-                          ),
+                      child: SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator()),
                     );
-                  },
-                );
-              },
-            ),
-          )
-        ],
+                  }
+
+                  final List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                      snapshot.data!.docs;
+                  numberofdrivers = documents.length;
+
+                  return ListView.builder(
+                    itemCount: documents.length,
+                    itemBuilder: (context, index) {
+                      final document = documents[index];
+                      final Map<String, dynamic> data = document.data()!;
+
+                      return Card(
+                        child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(data['image_url']),
+                            ),
+                            title: Text(data['username'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            subtitle: Text(data['number']),
+                            trailing: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                data['phoneNumberVerification']
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : const Icon(
+                                        Icons.cancel,
+                                        color: Colors.red,
+                                      ),
+                                Text(
+                                  data['phoneNumberVerification']
+                                      ? 'Verified'
+                                      : 'Not Verified',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10,
+                                      color: data['phoneNumberVerification']
+                                          ? Colors.green
+                                          : Colors.red),
+                                ),
+                              ],
+                            )
+                            // Add more widgets to display other document fields as needed
+                            ),
+                      );
+                    },
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

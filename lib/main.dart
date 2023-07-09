@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/services/location_provider.dart';
 
+import 'pages/driver.dart';
 import 'services/widget_tree.dart';
 
 Future<void> main() async {

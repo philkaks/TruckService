@@ -99,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
           child: FutureBuilder(
             future: FirebaseFirestore.instance
                 .collection('drivers')
-                .where("driver_free", isEqualTo: 'true')
+                .where("driver_free", isEqualTo: true)
                 .where("state", isEqualTo: 'kampala')
                 .where("number_verified", isEqualTo: true)
                 .get()

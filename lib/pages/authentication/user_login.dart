@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 email: _controllerEmail.text.toString().trim(),
                 password: _controllerPassword.text,
               )
-              .then((value) => Navigator.pushReplacement(
+              .then((value) => Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => const Driver())));
@@ -91,10 +91,10 @@ class _LoginPageState extends State<LoginPage> {
                 email: _controllerEmail.text.toString().trim(),
                 password: _controllerPassword.text,
               )
-              .then((value) => Navigator.pushAndRemoveUntil(
+              .then((value) => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const AdminPage()),
-                    (Route<dynamic> route) => false,
+                    
                   ));
         } else {
           setState(() {
