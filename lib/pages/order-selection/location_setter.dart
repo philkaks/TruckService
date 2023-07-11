@@ -144,7 +144,7 @@ class _LocSetState extends State<LocSet> {
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(23),
                     hintText: "Enter pick up location",
-                    prefixIcon: const Icon(Icons.pedal_bike_sharp),
+                    prefixIcon: const Icon(Icons.fire_truck),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -168,7 +168,7 @@ class _LocSetState extends State<LocSet> {
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(23),
                   hintText: "Enter delivery location",
-                  prefixIcon: const Icon(Icons.delivery_dining_sharp),
+                  prefixIcon: const Icon(Icons.fire_truck_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

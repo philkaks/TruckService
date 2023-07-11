@@ -61,7 +61,7 @@ class _EditDriverState extends State<EditDriver> {
               .collection('drivers')
               .doc(user!.uid)
               .update({
-            'username': name,
+            'name': name,
             'email': email,
           });
           FirebaseAuth.instance.currentUser?.updateDisplayName(name);

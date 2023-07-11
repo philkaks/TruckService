@@ -1,7 +1,7 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/app_start.dart';
 // import 'package:upbox/pages/authentication/number_verification.dart';
@@ -102,34 +102,41 @@ class _RegisterPageState extends State<RegisterPage> {
     if (userType == 'users') {
       await FirebaseFirestore.instance.collection(userType).doc(userId).set({
         'id': userId,
-        'username': username,
+        'name': username,
         'email': email,
         'password': password,
-        'phonenumber': 'unknown',        
+        'number': 'unknown',
         'user_lat': 'unknown',
         'user_lng': 'unknown',
         'userType': 'users',
+        'phoneNumberVerification': false,
+        'image_url':
+            'https://images.unsplash.com/photo-1530785602389-07594beb8b73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
       });
     }
     if (userType == 'drivers') {
       await FirebaseFirestore.instance.collection(userType).doc(userId).set({
         'id': userId,
-        'username': username,
+        'name': username,
         'email': email,
         'password': password,
         'phoneNumberVerification': false,
         'plateno': _plateno.text.toString().trim(),
         'number': _telno.text.toString().trim(),
         'state': _city.text.toString().trim(),
-        'driver_lat': 'unknown',
-        'driver_lng': 'unknown',
+        // 'driverLocation': const LatLng(0.347596, 32.58252),
         'userType': 'drivers',
-        'trips': 0,
+        'rides_count': 0,
+        'driver_arrived': true,
+        'driver_free': true,
+        'rating': 3.5,
+        'image_url':
+            'https://images.unsplash.com/photo-1530785602389-07594beb8b73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80'
       });
     } else if (userType == 'adminstrators') {
       await FirebaseFirestore.instance.collection(userType).doc(userId).set({
         'id': userId,
-        'username': username,
+        'name': username,
         'email': email,
         'password': password,
         'adminid': _adminid.text.toString().trim(),
@@ -169,13 +176,13 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 Container(
                   color: Colors.transparent,
-                  height: 120,
+                  height: 140,
                   // color: Colors.transparent,
                   child: Image.asset(
-                    "images/top.png",
+                    "images/app_icon.png",
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
                 Container(
@@ -281,7 +288,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       TextFormField(
                         controller: _password,
                         onEditingComplete: () {
-                          createUserWithEmailAndPassword();
+                          // createUserWithEmailAndPassword();
                         },
                         autocorrect: false,
                         obscureText: true,
@@ -401,9 +408,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       ElevatedButton(
                         onPressed: () {
-                          createUserWithEmailAndPassword().then((value){
-
-                             if (selectedValue == 1 ) {
+                          createUserWithEmailAndPassword().then((value) {
+                            if (selectedValue == 1) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -429,9 +435,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 (Route<dynamic> route) => false,
                               );
                             }
-
                           });
-                         
+
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
@@ -521,25 +526,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Already have an account?"),
-                          InkWell(
-                            child: const Text(
-                              " Log in",
-                              style: TextStyle(
-                                color: Colors.orange,
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                PageTransition(
-                                  child: const LoginPage(),
-                                  childCurrent: widget,
-                                  type: PageTransitionType.leftToRightJoined,
-                                  duration: const Duration(seconds: 0),
-                                  reverseDuration: const Duration(seconds: 0),
-                                ),
-                              );
-                            },
-                          )
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  PageTransition(
+                                    child: const LoginPage(),
+                                    childCurrent: widget,
+                                    type: PageTransitionType.leftToRightJoined,
+                                    duration: const Duration(seconds: 0),
+                                    reverseDuration: const Duration(seconds: 0),
+                                  ),
+                                );
+                              },
+                              child: const Text('Log in'))
                         ],
                       )
                     ],

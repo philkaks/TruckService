@@ -47,7 +47,7 @@ class MyDrawer extends StatelessWidget {
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
                   // getImage();
-                  var name = snapshot.data!.docs[0]['username'].toString();
+                  var name = snapshot.data!.docs[0]['name'].toString();
                   return Text(
                     name,
                     style: const TextStyle(

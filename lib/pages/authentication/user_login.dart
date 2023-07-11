@@ -17,14 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // getData('users');
-  //   // getData('drivers');
-  //   // getData('adminstrators');
-  //   // Provider.of<LocationProvider>(context, listen: false).initialization();
-  // }
   String? errorMessage = '';
   bool isLogin = true;
   int selectedValue = 1;
@@ -94,7 +86,6 @@ class _LoginPageState extends State<LoginPage> {
               .then((value) => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const AdminPage()),
-                    
                   ));
         } else {
           setState(() {
@@ -157,15 +148,18 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   color: Colors.transparent,
                   height: 140,
                   // color: Colors.transparent,
                   child: Image.asset(
-                    "images/top.png",
+                    "images/app_icon.png",
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
                 Container(
@@ -367,50 +361,50 @@ class _LoginPageState extends State<LoginPage> {
 
                       // or sign up with a different account
                       const SizedBox(height: 18),
-                      const Center(
-                        child: Text(
-                          "or",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 19,
-                          ),
-                        ),
-                      ),
+                      // const Center(
+                      //   child: Text(
+                      //     "or",
+                      //     style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 19,
+                      //     ),
+                      //   ),
+                      // ),
 
                       // sign in with google
-                      const SizedBox(height: 8),
-                      TextButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.all(20),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: const BorderSide(color: Colors.black12),
-                            ),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "images/google.png",
-                              width: 18,
-                            ),
-                            const SizedBox(width: 19),
-                            const Text(
-                              "Sign In with Google",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                      // const SizedBox(height: 8),
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   style: ButtonStyle(
+                      //     padding: MaterialStateProperty.all<EdgeInsets>(
+                      //       const EdgeInsets.all(20),
+                      //     ),
+                      //     shape:
+                      //         MaterialStateProperty.all<RoundedRectangleBorder>(
+                      //       RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(10.0),
+                      //         side: const BorderSide(color: Colors.black12),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Image.asset(
+                      //         "images/google.png",
+                      //         width: 18,
+                      //       ),
+                      //       const SizedBox(width: 19),
+                      //       const Text(
+                      //         "Sign In with Google",
+                      //         style: TextStyle(
+                      //           color: Colors.black,
+                      //         ),
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
 
                       // Already a user.
                       const SizedBox(height: 50),
@@ -418,25 +412,19 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Don't have an account?"),
-                          InkWell(
-                            child: const Text(
-                              " Sign Up",
-                              style: TextStyle(
-                                color: Colors.orange,
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                PageTransition(
-                                  child: const RegisterPage(),
-                                  childCurrent: widget,
-                                  type: PageTransitionType.rightToLeftJoined,
-                                  duration: const Duration(seconds: 0),
-                                  reverseDuration: const Duration(seconds: 0),
-                                ),
-                              );
-                            },
-                          )
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  PageTransition(
+                                    child: const RegisterPage(),
+                                    childCurrent: widget,
+                                    type: PageTransitionType.rightToLeftJoined,
+                                    duration: const Duration(seconds: 0),
+                                    reverseDuration: const Duration(seconds: 0),
+                                  ),
+                                );
+                              },
+                              child: const Text("Sign Up"))
                         ],
                       )
                     ],

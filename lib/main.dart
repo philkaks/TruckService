@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/services/location_provider.dart';
 
-import 'pages/driver.dart';
 import 'services/widget_tree.dart';
 
 Future<void> main() async {
@@ -64,6 +63,7 @@ class _MyAppState extends State<MyApp> {
         home: const 
         // AdminPage(),
         // Driver(),
+        
         WidgetTree(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
@@ -71,3 +71,20 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+
+
+// CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
+// consider the nature of the goods.
+
+
+// small sized truck
+// large
+// medium
+// this determines price per kilometer.
+
+
+
+// Add map to the drivers section
+
+// order for a truck.

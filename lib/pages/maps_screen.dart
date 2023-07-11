@@ -43,7 +43,7 @@ class _MainScreenState extends State<MainScreen> {
         .collection('drivers')
         .where("driver_free", isEqualTo: true)
         .where("state", isEqualTo: 'kampala')
-        .where("number_verified", isEqualTo: true)
+        .where("phoneNumberVerification", isEqualTo: true)
         .get()
         .then((value) {
       // for (var element in value.docs) {
@@ -78,8 +78,8 @@ class _MainScreenState extends State<MainScreen> {
       context: context,
       dialogType: DialogType.question,
       animType: AnimType.topSlide,
-      title: 'Cancel ride!',
-      desc: 'Are you sure you want to cancel the ride?',
+      title: 'Cancel TrackService Request!',
+      desc: 'Are you sure you want to cancel the service?',
       btnOkOnPress: endRide,
       btnOkColor: Colors.orange,
       btnCancelOnPress: () {},
@@ -92,7 +92,7 @@ class _MainScreenState extends State<MainScreen> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 500,
+          height: 700,
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
@@ -101,20 +101,17 @@ class _MainScreenState extends State<MainScreen> {
                 .collection('drivers')
                 .where("driver_free", isEqualTo: true)
                 .where("state", isEqualTo: 'kampala')
-                .where("number_verified", isEqualTo: true)
+                .where("phoneNumberVerification", isEqualTo: true)
                 .get()
                 .then((value) {
-              setState(() {
-                dName = value.docs[0]['name'];
-                dPlate = value.docs[0]['plateno'];
-                dRating = value.docs[0]['rating'];
-                dNumber = value.docs[0]['number'];
-                dArrived = value.docs[0]['driver_arrived'];
-                dRides = value.docs[0]['rides_count'];
-                dId = value.docs[0]['id'];
-              });
-
-              // ptint all the values above
+              // setState(() {
+              dName = value.docs[0]['name'];
+              dPlate = value.docs[0]['plateno'];
+              dRating = value.docs[0]['rating'];
+              dNumber = value.docs[0]['number'];
+              dArrived = value.docs[0]['driver_arrived'];
+              dRides = value.docs[0]['rides_count'];
+              dId = value.docs[0]['id'];
             }),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -215,8 +212,8 @@ class _MainScreenState extends State<MainScreen> {
       context: context,
       dialogType: DialogType.noHeader,
       animType: AnimType.topSlide,
-      title: 'Report rider!',
-      desc: 'Report the rider to the closest auhority',
+      title: 'Report driver!',
+      desc: 'Report the driver to the closest auhority',
       btnOkOnPress: () {},
       btnOkColor: Colors.orange,
       btnCancelOnPress: () {},
@@ -302,12 +299,14 @@ class _MainScreenState extends State<MainScreen> {
       directions['bounds_sw'],
     );
 
-    _setPolyline(directions['polyline_decoded']);
+    setState(() {
+      _setPolyline(directions['polyline_decoded']);
+    });
   }
 
   Future<dynamic> trackRide() async {
     Fluttertoast.showToast(
-      msg: "Finding a rider",
+      msg: "Finding a truck",
       gravity: ToastGravity.TOP,
     );
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
@@ -331,7 +330,7 @@ class _MainScreenState extends State<MainScreen> {
           Marker(
             visible: true,
             draggable: false,
-            infoWindow: const InfoWindow(title: "Rider location"),
+            infoWindow: const InfoWindow(title: "Truck location"),
             markerId: const MarkerId('track_marker'),
             position: LatLng(dGeo!.latitude, dGeo!.longitude),
             icon: customIcon,
@@ -343,14 +342,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void endRide() async {
-    FirebaseFirestore.instance.collection('drivers').doc(dId).update({
-      "driver_free": "true",
-      "driver_arrived": "waiting",
-    });
+    // FirebaseFirestore.instance.collection('drivers').doc(dId).update({
+    //   "driver_free": "true",
+    //   "driver_arrived": "waiting",
+    // });
     _polylines.clear();
     _markers.clear();
     Fluttertoast.showToast(
-      msg: "TruckService ride canceled",
+      msg: "TruckService canceled",
       gravity: ToastGravity.TOP,
       backgroundColor: Colors.black,
       textColor: Colors.white,
@@ -412,7 +411,7 @@ class _MainScreenState extends State<MainScreen> {
     debugPrint(directions['distance_km']['text']);
   }
 
-  var price = double.parse('100');
+  var price = double.parse('300000');
 
   var conditionMet = false;
 
@@ -422,7 +421,8 @@ class _MainScreenState extends State<MainScreen> {
     getData();
     trackRide();
     getDis();
-    showDriverDetails();
+    // drawRide();
+    // showDriverDetails();
   }
 
   @override
@@ -475,26 +475,27 @@ class _MainScreenState extends State<MainScreen> {
                             if (!snapshot.hasData || snapshot.data == null) {
                               return const Text('No data available');
                             }
-                            var status = snapshot.data!.docs[0]
-                                    ['driver_arrived'] ??
-                                false;
+                            var status =
+                                snapshot.data!.docs[0]['driver_arrived'];
                             GeoPoint geopoint = snapshot.data!.docs[0]
                                     ['driverLocation'] ??
                                 const LatLng(2.77457, 32.29899);
-                            if (status == "true" && !conditionMet) {
-                              FirebaseFirestore.instance
-                                  .collection('drivers')
-                                  .doc(dId!)
-                                  .update({
-                                "driver_free": "false",
-                              });
+                            if (status == "true") {
+                              // FirebaseFirestore.instance
+                              //     .collection('drivers')
+                              //     .doc(dId!)
+                              //     .update({
+                              //   "driver_free": "false",
+                              // });
+                              // setState(() {
                               drawRide();
+                              // });
                               conditionMet = true;
                             }
                             if (status == "complete") {
                               NotificationService().showNotification(
                                   title: "TruckService",
-                                  body: "Ride is complete");
+                                  body: "Drive is complete");
                               endRide();
                             }
                             return GoogleMap(
@@ -502,8 +503,8 @@ class _MainScreenState extends State<MainScreen> {
                               scrollGesturesEnabled: true,
                               tiltGesturesEnabled: false,
                               rotateGesturesEnabled: true,
-                              zoomControlsEnabled: false,
-                              zoomGesturesEnabled: false,
+                              zoomControlsEnabled: true,
+                              zoomGesturesEnabled: true,
                               markers: _markers,
                               polylines: _polylines,
                               mapType: MapType.normal,
@@ -514,12 +515,12 @@ class _MainScreenState extends State<MainScreen> {
                                   geopoint.latitude,
                                   geopoint.longitude,
                                 ),
-                                zoom: 15,
+                                zoom: 10,
                               ),
-                              onMapCreated:
-                                  (GoogleMapController controller) async {
-                                _controller.complete(controller);
-                              },
+                              // onMapCreated:
+                              //     (GoogleMapController controller) async {
+                              //   _controller.complete(controller);
+                              // },
                             );
                           },
                         ),
@@ -652,6 +653,30 @@ class _MainScreenState extends State<MainScreen> {
                                       )
                                     ],
                                   ),
+                                  // Column(
+                                  //   children: [
+                                  //     GestureDetector(
+                                  //       onTap: () {
+                                  //         drawRide()
+                                  //       },
+                                  //       child: Container(
+                                  //         padding: const EdgeInsets.all(12),
+                                  //         decoration: BoxDecoration(
+                                  //           color: const Color.fromARGB(
+                                  //               100, 237, 237, 237),
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(30),
+                                  //         ),
+                                  //         child: const Column(
+                                  //           children: [
+                                  //             Icon(Icons.roundabout_left),
+                                  //             Text('Show route')
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   Column(
                                     children: [
                                       GestureDetector(
@@ -735,7 +760,7 @@ class _MainScreenState extends State<MainScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Cancel ride",
+                                      "Cancel TruckService ",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,

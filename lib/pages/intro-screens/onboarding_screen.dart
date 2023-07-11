@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
-import 'package:upbox/pages/intro-screens/page1.dart';
 import 'package:upbox/pages/intro-screens/page2.dart';
 import 'package:upbox/pages/intro-screens/page3.dart';
 
@@ -27,11 +26,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _controller,
             onPageChanged: (index) {
               setState(() {
-                onLastPage = (index == 2);
+                onLastPage = (index == 1);
               });
             },
             children: const [
-              IntroPage1(),
+              // IntroPage1(),
               IntroPage2(),
               IntroPage3(),
             ],
@@ -67,7 +66,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 // next or done
                 onLastPage
                     ? GestureDetector(
-                        child: const Text("Done"),
+                        child: TextButton(
+                          child: const Text("Done"),
+                          onPressed: () {
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(
+                              builder: (context) {
+                                return const LoginPage();
+                              },
+                            ));
+                          },
+                        ),
                         onTap: () {
                           Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (context) {

@@ -6,11 +6,12 @@ import 'package:upbox/services/auth.dart';
 
 class LocationProvider with ChangeNotifier {
   Location? _location;
-  Location get location => _location !;
+  Location get location => _location!;
 
   LatLng? _locationPosition;
 
-  LatLng get locationPosition => _locationPosition ?? LatLng(0, 0);
+  LatLng get locationPosition =>
+      _locationPosition ?? const LatLng(0.347596, 32.582520);
 
   bool locationServiceActive = true;
 
@@ -52,7 +53,7 @@ class LocationProvider with ChangeNotifier {
         );
 
         // ignore: avoid_print
-        print(_locationPosition);
+        // print(_locationPosition);
         _locationPosition!.latitude;
         _locationPosition!.longitude;
 

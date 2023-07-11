@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
-import 'package:upbox/pages/intro-screens/onboarding_screen.dart';
 import 'package:upbox/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,23 +63,23 @@ class _Driver extends State<Driver> {
         );
   }
 
-  Future<void> deleteAccount() async {
-    Fluttertoast.showToast(
-      msg: "Account deleted, We hope to see you again in the future",
-      textColor: Colors.white,
-      gravity: ToastGravity.TOP,
-      toastLength: Toast.LENGTH_SHORT,
-    );
-    await FirebaseAuth.instance.currentUser!.delete().then((value) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) {
-            return const OnboardingScreen();
-          },
-        ),
-      );
-    });
-  }
+  // Future<void> deleteAccount() async {
+  //   Fluttertoast.showToast(
+  //     msg: "Account deleted, We hope to see you again in the future",
+  //     textColor: Colors.white,
+  //     gravity: ToastGravity.TOP,
+  //     toastLength: Toast.LENGTH_SHORT,
+  //   );
+  //   await FirebaseAuth.instance.currentUser!.delete().then((value) {
+  //     Navigator.of(context).push(
+  //       MaterialPageRoute(
+  //         builder: (BuildContext context) {
+  //           return const OnboardingScreen();
+  //         },
+  //       ),
+  //     );
+  //   });
+  // }
 
   String drivername = 'paul';
   @override
@@ -134,7 +133,7 @@ class _Driver extends State<Driver> {
                   final data = snapshot.data!.data();
 
                   if (data != null) {
-                    drivername = data['username'].toString();
+                    drivername = data['name'].toString();
                     return Column(
                       children: [
                         const SizedBox(height: 20),
@@ -157,7 +156,7 @@ class _Driver extends State<Driver> {
 
                               const SizedBox(height: 10),
                               Text(
-                                data['username'].toString(),
+                                data['name'].toString(),
                                 style: const TextStyle(
                                   fontSize: 20,
                                 ),
@@ -207,7 +206,7 @@ class _Driver extends State<Driver> {
                                     "From the people you've Worked on."),
                                 onTap: () {
                                   drivername =
-                                      data['username'].toString().toLowerCase();
+                                      data['name'].toString().toLowerCase();
                                   // print(drivername);
                                   Navigator.of(context).push(
                                     PageTransition(

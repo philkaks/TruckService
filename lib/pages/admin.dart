@@ -257,7 +257,7 @@ class _AdminPageState extends State<AdminPage> {
                             leading: CircleAvatar(
                               backgroundImage: NetworkImage(data['image_url']),
                             ),
-                            title: Text(data['username'],
+                            title: Text(data['name'],
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                             subtitle: Text(data['number']),

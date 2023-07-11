@@ -58,7 +58,7 @@ class _EditAccountState extends State<EditAccount> {
           );
         } else {
           FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
-            'username': name,
+            'name': name,
             'email': email,
           });
           FirebaseAuth.instance.currentUser?.updateDisplayName(name);
