@@ -55,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       dRating = value.docs[0]['rating'];
       dNumber = value.docs[0]['number'];
       dArrived = value.docs[0]['driver_arrived'];
-      dRides = value.docs[0]['rides_count'];
+      dRides = value.docs[0]['trips'];
       dId = value.docs[0]['id'];
     });
   }
@@ -110,7 +110,7 @@ class _MainScreenState extends State<MainScreen> {
               dRating = value.docs[0]['rating'];
               dNumber = value.docs[0]['number'];
               dArrived = value.docs[0]['driver_arrived'];
-              dRides = value.docs[0]['rides_count'];
+              dRides = value.docs[0]['trips'];
               dId = value.docs[0]['id'];
             }),
             builder: (context, snapshot) {
@@ -482,24 +482,23 @@ class _MainScreenState extends State<MainScreen> {
                                 snapshot.data!.docs[0]['driver_arrived'];
                             GeoPoint geopoint =
                                 snapshot.data!.docs[0]['driverLocation'];
-                            if (status == true) {
+                            if (status == "true" ) {
+                              // && !conditionMet
                               // FirebaseFirestore.instance
                               //     .collection('drivers')
                               //     .doc(dId!)
                               //     .update({
                               //   "driver_free": "false",
                               // });
-                              // setState(() {
                               drawRide();
-                              // });
-                              conditionMet = true;
+                              // conditionMet = true;
                             }
                             if (status == "complete") {
                               NotificationService().showNotification(
-                                  title: "TruckService",
-                                  body: "Drive is complete");
+                                  title: "Upbox", body: "Ride is complete");
                               endRide();
                             }
+
                             return GoogleMap(
                               compassEnabled: false,
                               scrollGesturesEnabled: true,
@@ -765,8 +764,8 @@ class _MainScreenState extends State<MainScreen> {
                     const SizedBox(height: 18),
                     GestureDetector(
                       onTap: () {
-                        showDriverDetails();
-                        // Navigator.of(context).pop();
+                        // showDriverDetails();
+                        Navigator.of(context).pop();
                       },
                       child: const Text(
                         "cancel search",
