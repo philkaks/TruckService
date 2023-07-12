@@ -146,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "$dRides ride(s)",
+                        "$dRides trip(s)",
                       )
                     ],
                   ),
@@ -231,7 +231,7 @@ class _MainScreenState extends State<MainScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               const Text(
-                  "Ride success        "), // !important : don't edit the space
+                  "Delivery success        "), // !important : don't edit the space
               GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
                 child: const Icon(Icons.close_rounded),
@@ -285,7 +285,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<dynamic> drawRide() async {
     NotificationService()
-        .showNotification(title: "TruckService", body: "Rider has arrived");
+        .showNotification(title: "TruckService", body: "Driver has arrived");
     var directions = await LocationService().getDirection(
       widget.sourceLocationName.toString(),
       widget.destinationName.toString(),
@@ -694,7 +694,7 @@ class _MainScreenState extends State<MainScreen> {
                                         ),
                                       ),
                                       const Text(
-                                        "Report rider",
+                                        "Report driver",
                                         style: TextStyle(
                                           fontSize: 17,
                                         ),
@@ -785,7 +785,7 @@ class _MainScreenState extends State<MainScreen> {
                   children: [
                     const CircularProgressIndicator(strokeWidth: 4),
                     const SizedBox(height: 18),
-                    const Text("Searching for rider please"),
+                    const Text("Searching for driver please wait..."),
                     const SizedBox(height: 18),
                     GestureDetector(
                       onTap: () {

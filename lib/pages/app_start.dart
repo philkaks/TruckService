@@ -161,7 +161,7 @@ class _AppStartState extends State<AppStart> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Order a rider",
+                                "Order a truck",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -198,7 +198,7 @@ class _AppStartState extends State<AppStart> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Track a ride",
+                                "Track your Delivery",
                                 style: TextStyle(
                                   color: Colors.black26,
                                   fontWeight: FontWeight.bold,

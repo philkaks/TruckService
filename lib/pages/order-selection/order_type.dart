@@ -45,7 +45,7 @@ class _OrderTypeState extends State<OrderType> {
               children: [
                 Container(height: 80, color: Colors.white),
                 const Text(
-                  "Item type selection",
+                  "Truck type selection",
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
@@ -53,7 +53,7 @@ class _OrderTypeState extends State<OrderType> {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  "Select the category of your item",
+                  "Select the type of truck you want to use for your delivery",
                   style: TextStyle(
                     color: Colors.grey,
                   ),
@@ -84,7 +84,7 @@ class _OrderTypeState extends State<OrderType> {
                           enableFeedback: true,
                           contentPadding: EdgeInsets.zero,
                           title: const Text(
-                            "Fragile products",
+                            "Large truck",
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -100,7 +100,7 @@ class _OrderTypeState extends State<OrderType> {
                           activeColor: Colors.orange,
                           checkColor: Colors.white,
                           subtitle: const Text(
-                              "select this option for fragile products"),
+                              "select this option for delivery of large items,machines and equipment"),
                           checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -124,7 +124,7 @@ class _OrderTypeState extends State<OrderType> {
                           enableFeedback: true,
                           contentPadding: EdgeInsets.zero,
                           title: const Text(
-                            "Semi-fragile products",
+                            "Medium truck",
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -140,7 +140,7 @@ class _OrderTypeState extends State<OrderType> {
                           activeColor: Colors.orange,
                           checkColor: Colors.white,
                           subtitle:
-                              const Text("select this option for semi-fragile"),
+                              const Text("select this option for medium-sized items such as furniture, electronics, etc."),
                           checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -164,7 +164,7 @@ class _OrderTypeState extends State<OrderType> {
                           enableFeedback: true,
                           contentPadding: EdgeInsets.zero,
                           title: const Text(
-                            "Non-fragile",
+                            "Small truck",
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -180,7 +180,7 @@ class _OrderTypeState extends State<OrderType> {
                           activeColor: Colors.orange,
                           checkColor: Colors.white,
                           subtitle:
-                              const Text("select this option for non fragile"),
+                              const Text("select this option for small items such as food, clothes, etc."),
                           checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),

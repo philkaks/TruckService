@@ -236,6 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                         onEditingComplete: () {
                           FocusScope.of(context).nextFocus();
                         },
+                         
                         autocorrect: true,
                         decoration: InputDecoration(
                           labelText: "Email",
@@ -358,53 +359,6 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-
-                      // or sign up with a different account
-                      const SizedBox(height: 18),
-                      // const Center(
-                      //   child: Text(
-                      //     "or",
-                      //     style: TextStyle(
-                      //       color: Colors.black,
-                      //       fontWeight: FontWeight.bold,
-                      //       fontSize: 19,
-                      //     ),
-                      //   ),
-                      // ),
-
-                      // sign in with google
-                      // const SizedBox(height: 8),
-                      // TextButton(
-                      //   onPressed: () {},
-                      //   style: ButtonStyle(
-                      //     padding: MaterialStateProperty.all<EdgeInsets>(
-                      //       const EdgeInsets.all(20),
-                      //     ),
-                      //     shape:
-                      //         MaterialStateProperty.all<RoundedRectangleBorder>(
-                      //       RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(10.0),
-                      //         side: const BorderSide(color: Colors.black12),
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Image.asset(
-                      //         "images/google.png",
-                      //         width: 18,
-                      //       ),
-                      //       const SizedBox(width: 19),
-                      //       const Text(
-                      //         "Sign In with Google",
-                      //         style: TextStyle(
-                      //           color: Colors.black,
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
 
                       // Already a user.
                       const SizedBox(height: 50),
