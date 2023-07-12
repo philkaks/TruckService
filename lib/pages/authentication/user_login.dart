@@ -189,21 +189,36 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       DropdownButton(
-                        hint: const Text("Select a user type"),
+                        borderRadius: BorderRadius.circular(10),
+                        focusColor: Colors.amber,
+                        hint: const Text(
+                          "Select a user type",
+                        ),
                         value: selectedValue,
+                        iconSize: 42,
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         items: const [
                           DropdownMenuItem(
                             value: 1,
-                            child: Text("USER"),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("USER"),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 2,
-                            child: Text("DRIVER"),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text("DRIVER"),
+                            ),
                           ),
                           DropdownMenuItem(
-                              value: 3, child: Text("ADMINSTRATOR")),
+                              value: 3,
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text("ADMINSTRATOR"),
+                              )),
                         ],
                         onChanged: (value) {
                           setState(
@@ -236,7 +251,6 @@ class _LoginPageState extends State<LoginPage> {
                         onEditingComplete: () {
                           FocusScope.of(context).nextFocus();
                         },
-                         
                         autocorrect: true,
                         decoration: InputDecoration(
                           labelText: "Email",

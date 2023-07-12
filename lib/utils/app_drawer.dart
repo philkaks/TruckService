@@ -66,20 +66,20 @@ class MyDrawer extends StatelessWidget {
               },
             ),
             accountEmail: Text(user?.email ?? 'Loading...'),
-            currentAccountPicture:   const CircleAvatar(
-                    child: ClipOval(
-                      child: Icon(Icons.person),
-                    ),
-                  ),
+            currentAccountPicture: const CircleAvatar(
+              child: ClipOval(
+                child: Icon(Icons.person),
+              ),
+            ),
             // currentAccountPicture: FutureBuilder(
             //   future: storage.downloadUrl("$imageName"),
             //   builder: (context, snapshot) {
             //     if (snapshot.hasError) {
-                  // const CircleAvatar(
-                  //   child: ClipOval(
-                  //     child: Icon(Icons.person),
-                  //   ),
-                  // );
+            // const CircleAvatar(
+            //   child: ClipOval(
+            //     child: Icon(Icons.person),
+            //   ),
+            // );
             //     } else if (snapshot.hasData) {
             //       return CircleAvatar(
             //         child: Container(
@@ -128,10 +128,11 @@ class MyDrawer extends StatelessWidget {
               );
             },
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ListTile(
-            leading: const Icon(Icons.history),
+            leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text(
-              "History",
+              "Log Out",
               style: TextStyle(
                 fontSize: 17,
               ),

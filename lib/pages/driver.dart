@@ -7,11 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../services/location_provider.dart';
 import 'editdriver.dart';
 import 'reviews.dart';
 
@@ -31,14 +34,16 @@ class _Driver extends State<Driver> {
           .snapshots();
 
 // final page = AccountPage();
-  void _showAction(text, action) {
+  void _showAction() {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.noHeader,
       animType: AnimType.topSlide,
-      title: text,
+      title: 'Logout',
       desc: 'Are you sure you want to logout?',
-      btnOkOnPress: action,
+      btnOkOnPress: () {
+        signOut();
+      },
       btnOkColor: Colors.black,
       btnCancelOnPress: () {},
       btnCancelColor: const Color.fromARGB(255, 199, 199, 199),
@@ -62,24 +67,6 @@ class _Driver extends State<Driver> {
           ),
         );
   }
-
-  // Future<void> deleteAccount() async {
-  //   Fluttertoast.showToast(
-  //     msg: "Account deleted, We hope to see you again in the future",
-  //     textColor: Colors.white,
-  //     gravity: ToastGravity.TOP,
-  //     toastLength: Toast.LENGTH_SHORT,
-  //   );
-  //   await FirebaseAuth.instance.currentUser!.delete().then((value) {
-  //     Navigator.of(context).push(
-  //       MaterialPageRoute(
-  //         builder: (BuildContext context) {
-  //           return const OnboardingScreen();
-  //         },
-  //       ),
-  //     );
-  //   });
-  // }
 
   String drivername = 'paul';
   @override
@@ -141,17 +128,13 @@ class _Driver extends State<Driver> {
                           child: Column(
                             children: [
                               Container(
-                                width: 150,
-                                height: 150,
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width / 1.2,
                                 // color: const Color.fromARGB(255, 198, 197, 197),
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        data['image_url'].toString()),
-                                    fit: BoxFit.cover,
-                                  ),
                                 ),
+                                child: googleMapUI(),
                               ),
 
                               const SizedBox(height: 10),
@@ -329,13 +312,13 @@ class _Driver extends State<Driver> {
                                     // ),
                                   ),
                                   onTap: () {
-                                    _showAction('Confirm logout!', signOut);
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const LoginPage(),
-                                      ),
-                                    );
+                                    _showAction();
+                                    // Navigator.pushReplacement(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => const LoginPage(),
+                                    //   ),
+                                    // );
                                   },
                                 ),
                               )
@@ -354,4 +337,40 @@ class _Driver extends State<Driver> {
       ),
     );
   }
+}
+
+Widget googleMapUI() {
+  return Consumer<LocationProvider>(
+    builder: (consumeContext, model, child) {
+      // ignore: unnecessary_null_comparison
+      if (model.locationPosition != null) {
+        return GoogleMap(
+          trafficEnabled: false,
+          myLocationButtonEnabled: false,
+          myLocationEnabled: true,
+          compassEnabled: false,
+          mapType: MapType.normal,
+          initialCameraPosition: CameraPosition(
+            target: model.locationPosition,
+            zoom: 15,
+          ),
+          // onMapCreated: (GoogleMapController controller) {
+
+          // },
+        );
+      } else {
+        return Container(
+          color: Colors.white,
+          child: const Column(
+            children: [
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+              Text("Loading, please wait"),
+            ],
+          ),
+        );
+      }
+    },
+  );
 }

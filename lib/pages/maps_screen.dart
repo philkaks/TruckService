@@ -407,11 +407,14 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       km = directions['distance_km']['text'].toString();
     });
+    // final distanceString = km.replaceAll(RegExp(r'[^0-9\.]'), '');
+    // final distance = double.parse(distanceString) * 1000.0;
+    // return distance;
 
-    debugPrint(directions['distance_km']['text']);
+    // debugPrint(directions['distance_km']['text']);
   }
 
-  var price = double.parse('300000');
+  // var price = double.parse('300000');
 
   var conditionMet = false;
 
@@ -477,10 +480,9 @@ class _MainScreenState extends State<MainScreen> {
                             }
                             var status =
                                 snapshot.data!.docs[0]['driver_arrived'];
-                            GeoPoint geopoint = snapshot.data!.docs[0]
-                                    ['driverLocation'] ??
-                                const LatLng(2.77457, 32.29899);
-                            if (status == "true") {
+                            GeoPoint geopoint =
+                                snapshot.data!.docs[0]['driverLocation'];
+                            if (status == true) {
                               // FirebaseFirestore.instance
                               //     .collection('drivers')
                               //     .doc(dId!)
@@ -590,22 +592,20 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      const SizedBox(
-                                        child: Icon(
-                                          Icons.currency_pound_outlined,
-                                          color: Colors.orange,
-                                        ),
-                                      ),
                                       Text(
-                                        price.toString(),
+                                        'Shs. ${double.parse(
+                                                  km.replaceAll(
+                                                      RegExp(r'[^0-9\.]'), ''),
+                                                ) * 1000.0}'
+                                            .toString(),
                                         style: const TextStyle(
                                           fontSize: 23,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.orange,
                                         ),
-                                      )
+                                      ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
 
@@ -653,30 +653,6 @@ class _MainScreenState extends State<MainScreen> {
                                       )
                                     ],
                                   ),
-                                  // Column(
-                                  //   children: [
-                                  //     GestureDetector(
-                                  //       onTap: () {
-                                  //         drawRide()
-                                  //       },
-                                  //       child: Container(
-                                  //         padding: const EdgeInsets.all(12),
-                                  //         decoration: BoxDecoration(
-                                  //           color: const Color.fromARGB(
-                                  //               100, 237, 237, 237),
-                                  //           borderRadius:
-                                  //               BorderRadius.circular(30),
-                                  //         ),
-                                  //         child: const Column(
-                                  //           children: [
-                                  //             Icon(Icons.roundabout_left),
-                                  //             Text('Show route')
-                                  //           ],
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                   Column(
                                     children: [
                                       GestureDetector(
@@ -690,7 +666,7 @@ class _MainScreenState extends State<MainScreen> {
                                                 BorderRadius.circular(30),
                                           ),
                                           child: const Icon(
-                                              Icons.bike_scooter_outlined),
+                                              Icons.fire_truck_rounded),
                                         ),
                                       ),
                                       const Text(

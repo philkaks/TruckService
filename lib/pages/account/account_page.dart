@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/account/edit_account.dart';
-import 'package:upbox/pages/intro-screens/onboarding_screen.dart';
+import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
 
 class AccountPage extends StatefulWidget {
@@ -44,7 +44,8 @@ class _AccountPageState extends State<AccountPage> {
           (value) => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) {
-                return const OnboardingScreen();
+                return const LoginPage();
+                // OnboardingScreen();
               },
             ),
           ),
@@ -62,7 +63,8 @@ class _AccountPageState extends State<AccountPage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext context) {
-            return const OnboardingScreen();
+            return const LoginPage();
+            // OnboardingScreen();
           },
         ),
       );
@@ -71,8 +73,7 @@ class _AccountPageState extends State<AccountPage> {
 
   // ignore: prefer_typing_uninitialized_variables
   var imageName;
-  
-  
+
   // getImage() async {
   //   await FirebaseFirestore.instance
   //       .collection('users')
@@ -223,8 +224,7 @@ class _AccountPageState extends State<AccountPage> {
                       builder:
                           (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasData) {
-                          var name =
-                              snapshot.data!.docs[0]['username'].toString();
+                          var name = snapshot.data!.docs[0]['name'].toString();
                           return Text(
                             name,
                             style: const TextStyle(
@@ -305,7 +305,7 @@ class _AccountPageState extends State<AccountPage> {
                         return ListTile(
                           leading: const Icon(Icons.phone_iphone_outlined),
                           title: Text(
-                            snapshot.data!.docs[0]['phonenumber'].toString(),
+                            snapshot.data!.docs[0]['number'].toString(),
                           ),
                           trailing: numbVer(),
                           onTap: () {},

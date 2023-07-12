@@ -139,8 +139,8 @@ class _OrderTypeState extends State<OrderType> {
                           },
                           activeColor: Colors.orange,
                           checkColor: Colors.white,
-                          subtitle:
-                              const Text("select this option for medium-sized items such as furniture, electronics, etc."),
+                          subtitle: const Text(
+                              "select this option for medium-sized items such as furniture, electronics, etc."),
                           checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -179,8 +179,8 @@ class _OrderTypeState extends State<OrderType> {
                           },
                           activeColor: Colors.orange,
                           checkColor: Colors.white,
-                          subtitle:
-                              const Text("select this option for small items such as food, clothes, etc."),
+                          subtitle: const Text(
+                              "select this option for small items such as food, clothes, etc."),
                           checkboxShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -189,20 +189,20 @@ class _OrderTypeState extends State<OrderType> {
                     ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height / 15),
+                SizedBox(height: MediaQuery.of(context).size.height / 30),
                 ElevatedButton(
                   onPressed: _isChecked == true ||
                           _isChecked2 == true ||
                           _isChecked3 == true
                       ? () {
                           if (_isChecked == true) {
-                            SessionManager().set("item-type", 'fragile');
+                            SessionManager().set("item-type", 'Large items');
                           }
                           if (_isChecked2 == true) {
-                            SessionManager().set("item-type", 'semi-fragile');
+                            SessionManager().set("item-type", 'Medium items');
                           }
                           if (_isChecked3 == true) {
-                            SessionManager().set("item-type", 'non-fragile');
+                            SessionManager().set("item-type", 'Small items');
                           }
                           Navigator.of(context).push(
                             PageTransition(

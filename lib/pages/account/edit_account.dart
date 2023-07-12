@@ -17,7 +17,7 @@ class EditAccount extends StatefulWidget {
 class _EditAccountState extends State<EditAccount> {
   final User? user = Auth().currentUser;
 
-  var name;
+  var password;
   var email;
   Future<dynamic> getUserFromFB() async {
     await FirebaseFirestore.instance
@@ -25,13 +25,13 @@ class _EditAccountState extends State<EditAccount> {
         .where('id', isEqualTo: user!.uid)
         .get()
         .then((value) {
-      name = value.docs[0]['username'];
+      password = value.docs[0]['password'];
       email = value.docs[0]['email'];
     });
   }
 
-  Future<dynamic> updateData(name, email) async {
-    if (name == '' || email == '') {
+  Future<dynamic> updateData(BuildContext context, password, email) async {
+    if (password == '' || email == '') {
       Fluttertoast.showToast(
         msg: "No changes made",
         backgroundColor: Colors.black,
@@ -58,10 +58,10 @@ class _EditAccountState extends State<EditAccount> {
           );
         } else {
           FirebaseFirestore.instance.collection('users').doc(user!.uid).update({
-            'name': name,
+            'password': password,
             'email': email,
           });
-          FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+          FirebaseAuth.instance.currentUser?.updatePassword(password);
           Fluttertoast.showToast(
             msg: "Profile updated successfully",
             backgroundColor: Colors.orange,
@@ -72,8 +72,8 @@ class _EditAccountState extends State<EditAccount> {
     }
   }
 
-  final TextEditingController _nameUpdate = TextEditingController();
-  final TextEditingController _emailUpdate = TextEditingController();
+  final TextEditingController emailUpdate = TextEditingController();
+  final TextEditingController passwordUpdate = TextEditingController();
 
   @override
   void initState() {
@@ -116,9 +116,9 @@ class _EditAccountState extends State<EditAccount> {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                       image: NetworkImage(
-                        'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Fstock-illustration-vector-icon-user-avatar-web-site-mobile-app-man-face-flat-style-social-network-profile-image45836554&psig=AOvVaw2XpISv6ux3534b5gF2fKpf&ust=1682599185516000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCPiTscjIx_4CFQAAAAAdAAAAABAE',
+                        'https://plus.unsplash.com/premium_photo-1658506796600-a4879bb3662a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
                       ),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -127,21 +127,25 @@ class _EditAccountState extends State<EditAccount> {
               const Text("PUBLIC INFORMATION"),
               const SizedBox(height: 5),
               TextFormField(
+                controller: emailUpdate,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "First name",
+                  hintText: "Email",
                 ),
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: passwordUpdate,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "Phone number",
+                  hintText: "Password",
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  updateData(context, passwordUpdate.text, emailUpdate.text);
+                },
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(
                     const EdgeInsets.all(20),
@@ -156,9 +160,9 @@ class _EditAccountState extends State<EditAccount> {
                     ),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       "Update",
                       style: TextStyle(

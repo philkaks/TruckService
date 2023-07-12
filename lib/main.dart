@@ -28,7 +28,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // await dotenv.load(fileName: '.env');
-  await Future.delayed(const Duration(seconds: 3));
+  // await Future.delayed(const Duration(seconds: 3));
   runApp(const MyApp());
 }
 
