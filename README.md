@@ -19,7 +19,7 @@ samples, guidance on mobile development, and a full API reference.
 
 
 ## Collective image screenshots
-![upbox-screenshots](https://github.com/TheCodeDaniel/upbox-delivery/assets/130862856/128b6b80-c670-4e19-a05b-6d8ee5d103b6)
+<!-- ![upbox-screenshots](https://github.com/TheCodeDaniel/upbox-delivery/assets/130862856/128b6b80-c670-4e19-a05b-6d8ee5d103b6) -->
 
 
 

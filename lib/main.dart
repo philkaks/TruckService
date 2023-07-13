@@ -73,6 +73,9 @@ class _MyAppState extends State<MyApp> {
 }
 
 
+// the map should focus on the point of focus.
+// the suggestion should be brought up when the user is typing.
+
 
 // CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
 // consider the nature of the goods.
@@ -82,9 +85,34 @@ class _MyAppState extends State<MyApp> {
 // large
 // medium
 // this determines price per kilometer.
+// THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
 
 
 
 // Add map to the drivers section
 
 // order for a truck.
+
+// get notification when the truck is on the way.
+// get notification when the truck is at the pickup location.
+// get notification when the truck is at the drop off location.
+//! get notification to the driver when he is assigned a job.
+
+
+// calculate the distance between the driver and user.
+
+// COLOR SCHEME
+// Colors blue and white. 
+
+
+
+// put a home screen for the user, but not to come to the map directly.
+// e.g order a truck, track a truck, contact us, about us, terms and conditions, privacy policy, etc.
+
+
+
+// admin UI
+// should be able to see all the drivers and their details. plus users and their details.
+// should be able to see all the orders and their details.
+
+
