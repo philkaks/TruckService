@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:upbox/pages/admin.dart';
+import 'package:upbox/admin/admin.dart';
 import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/pages/authentication/user_register.dart';
 import 'package:upbox/pages/driver.dart';
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   ));
         } else {
           setState(() {
-            errorMessage = 'Please, select a correct user type';
+            errorMessage = 'Wrong Login Credentials, try again';
           });
         }
         // await Auth()

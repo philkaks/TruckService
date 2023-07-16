@@ -404,26 +404,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   double price = 0;
-  // pricePerTruck() {
-  //   if (ref.read(truckchosen.notifier).state == 1) {
-  //     return price = double.parse(
-  //           km.replaceAll(RegExp(r'[^0-9\.]'), ''),
-  //         ) *
-  //         3;
-  //   } else if (ref.read(truckchosen.notifier).state == 2) {
-  //     return price = double.parse(
-  //           km.replaceAll(RegExp(r'[^0-9\.]'), ''),
-  //         ) *
-  //         2;
-  //   } else if (ref.read(truckchosen.notifier).state == 3) {
-  //     return price = double.parse(
-  //           km.replaceAll(RegExp(r'[^0-9\.]'), ''),
-  //         ) *
-  //         1;
-  //   } else {
-  //     return price = 0;
-  //   }
-  // }
+
   double pricePerTruck() {
     final truckChosen = ref.read(truckchosen.notifier).state;
     final double kmValue = double.parse(km.replaceAll(RegExp(r'[^0-9\.]'), ''));
@@ -449,7 +430,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     getData();
     trackRide();
     getDis();
-    // pricePerTruck(km);
+    
     // drawRide();
     // showDriverDetails();
   }

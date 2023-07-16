@@ -7,6 +7,7 @@ import 'package:upbox/services/widget_tree.dart';
 
 import 'firebase_options.dart';
 import 'homepage.dart';
+import 'admin/admin.dart';
 // import 'package:upbox/pages/app_start.dart';
 // import 'package:upbox/services/location_provider.dart';
 
@@ -58,13 +59,12 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Work_Sans",
           brightness: Brightness.light,
         ),
-        home:
-            // AdminPage(),
-            // Driver(),
-            // HomePage(),
-            // MapScreen(),
+        home: const AdminPage(),
+        // Driver(),
+        // HomePage(),
+        // MapScreen(),
 
-        WidgetTree(),
+        // WidgetTree(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
 // Colors blue and white.
 
 //? put a home screen for the user, but not to come to the map directly.
-// e.g order a truck, track a truck, contact us, about us, terms and conditions, privacy policy, etc.
+//? e.g order a truck, track a truck, contact us, about us, terms and conditions, privacy policy, etc.
 
 // admin UI
 // should be able to see all the drivers and their details. plus users and their details.
