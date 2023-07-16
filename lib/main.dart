@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,11 +59,11 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Work_Sans",
           brightness: Brightness.light,
         ),
-        home: const 
-        // AdminPage(),
-        // Driver(),
-        
-        WidgetTree(),
+        home: const
+            // AdminPage(),
+            // Driver(),
+
+            WidgetTree(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
@@ -74,16 +73,16 @@ class _MyAppState extends State<MyApp> {
 
 
 // the map should focus on the point of focus.
-// the suggestion should be brought up when the user is typing.
+//? the suggestion should be brought up when the user is typing.
 
 
-// CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
+//? CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
 // consider the nature of the goods.
 
 
-// small sized truck
-// large
-// medium
+//? small sized truck
+//? large
+//? medium
 // this determines price per kilometer.
 // THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
 

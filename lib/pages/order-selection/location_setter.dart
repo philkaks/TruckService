@@ -18,10 +18,14 @@ class _LocSetState extends State<LocSet> {
   TextEditingController inputOne = TextEditingController();
   TextEditingController inputTwo = TextEditingController();
 
-  bool _isbtnActive = false;
+  // final bool _isbtnActive = false;
+  bool editing1 = false;
+  bool editing2 = false;
 
   String? countryName;
   String? state;
+
+  List<String> locationSuggestions = [];
 
   void locationData() async {
     try {
@@ -79,20 +83,35 @@ class _LocSetState extends State<LocSet> {
           'places_prediction4': places['predictions'][3]['description'] ?? '',
         };
 
-        print(result);
+        // print(result);
+        setState(() {
+          locationSuggestions = List<String>.from(places['predictions']
+              .map((prediction) => prediction['description']));
+        });
       } else {
-        print('No predictions found');
+        // print('No predictions found');
+        setState(() {
+          locationSuggestions.clear();
+        });
       }
-
-      // setState(() {
-      //   placeList = result;
-      // });
-
-      // ignore: avoid_print
-      // print(result);
     } else {
       throw Exception('Failed to load predictions');
     }
+  }
+
+  // Function to handle when a suggestion is tapped
+  void onSuggestionSelected(String suggestion, TextEditingController input) {
+    setState(() {
+      input.text = suggestion;
+      locationSuggestions.clear();
+      if (input == inputOne) {
+        editing1 = false;
+      } else {
+        editing2 = false;
+      }
+    });
+    FocusScope.of(context)
+        .nextFocus(); // Move to the next field after selecting the suggestion
   }
 
   @override
@@ -140,6 +159,7 @@ class _LocSetState extends State<LocSet> {
               const SizedBox(height: 40),
               Align(
                 child: TextFormField(
+                  // enabled: false,
                   controller: inputOne,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(23),
@@ -151,18 +171,29 @@ class _LocSetState extends State<LocSet> {
                   ),
                   onChanged: (value) async {
                     await getLocationSuggestion(value);
+                    setState(() {
+                      editing1 = true;
+                    });
                   },
                   onEditingComplete: () {
+                    setState(() {
+                      locationSuggestions.clear();
+                      editing1 = false;
+                    });
                     FocusScope.of(context).nextFocus();
                   },
                 ),
               ),
               const SizedBox(height: 40),
+              if (locationSuggestions.isNotEmpty && editing1 == true)
+                suggestionList(),
+              const SizedBox(height: 40),
               TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    _isbtnActive = value.length >= 5 ? true : false;
-                  });
+                onChanged: (value) async {
+                  await getLocationSuggestion(value);
+                  // setState(() {
+                  //   _isbtnActive = value.length >= 5 ? true : false;
+                  // });
                 },
                 controller: inputTwo,
                 decoration: InputDecoration(
@@ -174,29 +205,49 @@ class _LocSetState extends State<LocSet> {
                   ),
                 ),
               ),
+              if (locationSuggestions.isNotEmpty)
+                Container(
+                  height: 200, // Adjust the height as needed
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListView.builder(
+                    itemCount: locationSuggestions.length,
+                    itemBuilder: (context, index) {
+                      final suggestion = locationSuggestions[index];
+                      return GestureDetector(
+                        onTap: () => onSuggestionSelected(suggestion, inputTwo),
+                        child: Card(
+                          child: ListTile(
+                            title: Text(suggestion),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               SizedBox(height: MediaQuery.of(context).size.height / 8),
               Container(
                 alignment: const Alignment(0, 0.7),
                 child: ElevatedButton(
-                  onPressed: _isbtnActive == true
-                      ? () {
-                          Navigator.of(context).push(
-                            PageTransition(
-                              child: MainScreen(
-                                sourceLocationName: inputOne.text,
-                                destinationName: inputTwo.text,
-                                cNAme: countryName.toString(),
-                                // sName: state.toString(),
-                              ),
-                              childCurrent: widget,
-                              type: PageTransitionType.rightToLeftJoined,
-                              duration: const Duration(milliseconds: 200),
-                              reverseDuration:
-                                  const Duration(milliseconds: 200),
-                            ),
-                          );
-                        }
-                      : null,
+                  onPressed:
+                      inputOne.text.isNotEmpty && inputTwo.text.isNotEmpty
+                          ? () {
+                              Navigator.of(context).push(
+                                PageTransition(
+                                  child: MainScreen(
+                                    sourceLocationName: inputOne.text,
+                                    destinationName: inputTwo.text,
+                                    cNAme: countryName.toString(),
+                                    // sName: state.toString(),
+                                  ),
+                                  childCurrent: widget,
+                                  type: PageTransitionType.rightToLeftJoined,
+                                  duration: const Duration(milliseconds: 200),
+                                  reverseDuration:
+                                      const Duration(milliseconds: 200),
+                                ),
+                              );
+                            }
+                          : null,
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.all(20),
@@ -229,6 +280,27 @@ class _LocSetState extends State<LocSet> {
           ),
         ),
       )),
+    );
+  }
+
+  Container suggestionList() {
+    return Container(
+      height: 200, // Adjust the height as needed
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: ListView.builder(
+        itemCount: locationSuggestions.length,
+        itemBuilder: (context, index) {
+          final suggestion = locationSuggestions[index];
+          return GestureDetector(
+            onTap: () => onSuggestionSelected(suggestion, inputOne),
+            child: Card(
+              child: ListTile(
+                title: Text(suggestion),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
