@@ -272,6 +272,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_riverpod",
+      "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_riverpod-2.3.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_session_manager",
       "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_session_manager-1.0.3",
       "packageUri": "lib/",
@@ -476,12 +482,6 @@
       "languageVersion": "2.17"
     },
     {
-      "name": "nested",
-      "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "page_transition",
       "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/page_transition-2.0.9",
       "packageUri": "lib/",
@@ -542,12 +542,6 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "provider",
-      "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.0.5",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "quiver",
       "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/quiver-3.2.1",
       "packageUri": "lib/",
@@ -558,6 +552,12 @@
       "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/rive-0.9.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "riverpod",
+      "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/riverpod-2.3.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "shared_preferences",
@@ -624,6 +624,12 @@
       "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "state_notifier",
+      "rootUri": "file:///C:/Users/PHILIP/AppData/Local/Pub/Cache/hosted/pub.dev/state_notifier-0.7.2+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "stream_channel",
@@ -758,7 +764,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-07-16T12:59:18.382110Z",
+  "generated": "2023-07-16T14:31:16.620859Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

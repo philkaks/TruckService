@@ -9,12 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../services/location_provider.dart';
 import 'editdriver.dart';
 import 'reviews.dart';
 
@@ -340,37 +337,18 @@ class _Driver extends State<Driver> {
 }
 
 Widget googleMapUI() {
-  return Consumer<LocationProvider>(
-    builder: (consumeContext, model, child) {
-      // ignore: unnecessary_null_comparison
-      if (model.locationPosition != null) {
-        return GoogleMap(
-          trafficEnabled: false,
-          myLocationButtonEnabled: false,
-          myLocationEnabled: true,
-          compassEnabled: false,
-          mapType: MapType.normal,
-          initialCameraPosition: CameraPosition(
-            target: model.locationPosition,
-            zoom: 15,
-          ),
-          // onMapCreated: (GoogleMapController controller) {
-
-          // },
-        );
-      } else {
-        return Container(
-          color: Colors.white,
-          child: const Column(
-            children: [
-              Center(
-                child: CircularProgressIndicator(),
-              ),
-              Text("Loading, please wait"),
-            ],
-          ),
-        );
-      }
-    },
+  return const GoogleMap(
+    trafficEnabled: false,
+    myLocationButtonEnabled: false,
+    myLocationEnabled: true,
+    compassEnabled: false,
+    mapType: MapType.normal,
+    initialCameraPosition: CameraPosition(
+      target: LatLng(0.347596, 32.582520),
+      zoom: 15,
+    ),
+    // onMapCreated: (GoogleMapController controller) {
+    //   controller.complete(controller);
+    // },
   );
 }

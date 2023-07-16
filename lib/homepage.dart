@@ -1,91 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// import 'pages/app_start.dart';
-
-// class HomePage extends StatelessWidget {
-//   const HomePage({super.key});
-
-//   void _onCardTapped(int title) {
-//     String message = 'Card $title tapped!';
-//     print(message);
-//     // You can display a dialog or do any other action here
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.white,
-//         title: const Center(
-//             child:
-//                 Text('Truck Service', style: TextStyle(color: Colors.black))),
-//       ),
-//       body: Center(
-//         child: GridView.count(
-//           crossAxisCount: 2,
-//           mainAxisSpacing: 20,
-//           crossAxisSpacing: 20,
-//           padding: const EdgeInsets.all(20),
-//           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           children: [
-//             ElevatedCard(
-//               title: '',
-//               onTap: () => Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) => const AppStart(),
-//                 ),
-//               ),
-//             ),
-//             ElevatedCard(
-//               title: '',
-//               onTap: () => _onCardTapped(2),
-//             ),
-//             ElevatedCard(
-//               title: '',
-//               onTap: () => _onCardTapped(3),
-//             ),
-//             ElevatedCard(
-//               title: '',
-//               onTap: () => _onCardTapped(4),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class ElevatedCard extends StatelessWidget {
-//   final String title;
-//   final Function onTap;
-
-//   const ElevatedCard({
-//     super.key,
-//     required this.title,
-//     required this.onTap,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: () => onTap(),
-//       child: Card(
-//         elevation: 8,
-//         child: Container(
-//           width: 100,
-//           height: 100,
-//           alignment: Alignment.center,
-//           child: Text(
-//             title,
-//             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'pages/app_start.dart';
 import 'dart:ui' as ui;
@@ -247,11 +159,7 @@ class ElevatedCard extends StatelessWidget {
                 ],
               ),
             )
-            // Text(
-            //   title,
-            //   style: const TextStyle(
-            //       fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-            // ),
+            
             ),
       ),
     );

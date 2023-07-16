@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 import 'package:upbox/pages/order-selection/order_type.dart';
-import 'package:upbox/services/location_provider.dart';
 import 'package:upbox/utils/app_drawer.dart';
 
 class AppStart extends StatefulWidget {
@@ -30,7 +28,7 @@ class _AppStartState extends State<AppStart> {
   @override
   void initState() {
     super.initState();
-    Provider.of<LocationProvider>(context, listen: false).initialization();
+    // Provider.of<LocationProvider>(context, listen: false).initialization();
   }
 
   @override
@@ -221,38 +219,19 @@ class _AppStartState extends State<AppStart> {
   }
 
   Widget googleMapUI() {
-    return Consumer<LocationProvider>(
-      builder: (consumeContext, model, child) {
-        // ignore: unnecessary_null_comparison
-        if (model.locationPosition != null) {
-          return GoogleMap(
-            trafficEnabled: false,
-            myLocationButtonEnabled: false,
-            myLocationEnabled: true,
-            compassEnabled: false,
-            mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
-              target: model.locationPosition,
-              zoom: 15,
-            ),
-            // onMapCreated: (GoogleMapController controller) {
-
-            // },
-          );
-        } else {
-          return Container(
-            color: Colors.white,
-            child: const Column(
-              children: [
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-                Text("Loading, please wait"),
-              ],
-            ),
-          );
-        }
-      },
+    return GoogleMap(
+      trafficEnabled: false,
+      myLocationButtonEnabled: false,
+      myLocationEnabled: true,
+      compassEnabled: false,
+      mapType: MapType.normal,
+      initialCameraPosition: CameraPosition(
+        target: _initialcameraposition,
+        zoom: 15,
+      ),
+      // onMapCreated: (GoogleMapController controller) {
+      //   controller.complete(controller);
+      // },
     );
   }
 }

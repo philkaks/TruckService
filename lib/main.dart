@@ -2,35 +2,44 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:upbox/homepage.dart';
-import 'package:upbox/pages/app_start.dart';
-import 'package:upbox/services/location_provider.dart';
 
-import 'services/widget_tree.dart';
+import 'firebase_options.dart';
+// import 'package:upbox/pages/app_start.dart';
+// import 'package:upbox/services/location_provider.dart';
 
-Future<void> main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarContrastEnforced: false,
-    ),
-  );
+// Future<void> main() async {
+//   SystemChrome.setSystemUIOverlayStyle(
+//     const SystemUiOverlayStyle(
+//       statusBarColor: Colors.transparent,
+//       statusBarIconBrightness: Brightness.dark,
+//       statusBarBrightness: Brightness.dark,
+//       systemNavigationBarIconBrightness: Brightness.dark,
+//       systemNavigationBarColor: Colors.white,
+//       systemNavigationBarContrastEnforced: false,
+//     ),
+//   );
+  
 
   // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
   //     overlays: [SystemUiOverlay.top]);
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
 
   // await dotenv.load(fileName: '.env');
   // await Future.delayed(const Duration(seconds: 3));
-  runApp(const MyApp());
-}
+//   runApp(const MyApp());
+// }
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const HomePage());
+} 
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -42,18 +51,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => LocationProvider(),
-          child: const AppStart(),
-        ),
-
-        // ChangeNotifierProvider(
-        //   create: (context) => GoogleSignInProvider(),
-        //   child: const LoginPage(),
-        // )
-      ],
+    return ProviderScope(
       child: MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.orange,
@@ -65,30 +63,40 @@ class _MyAppState extends State<MyApp> {
             // Driver(),
             HomePage(),
 
-            // WidgetTree(),
+        // WidgetTree(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
     );
+    // MultiProvider(
+    // providers: [
+    // ChangeNotifierProvider(
+    //   create: (context) => LocationProvider(),
+    //   child: const AppStart(),
+    // ),
+
+    // ChangeNotifierProvider(
+    //   create: (context) => GoogleSignInProvider(),
+    //   child: const LoginPage(),
+    // )
+    // ],
+    //   child:
+    // );
   }
 }
 
-
+// TODO: THESE CHANGES BELOW SUGGESTED BY THE CLIENT SHOULD BE IMPLEMENTED.
 // the map should focus on the point of focus.
 //? the suggestion should be brought up when the user is typing.
 
-
 //? CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
 // consider the nature of the goods.
-
 
 //? small sized truck
 //? large
 //? medium
 // this determines price per kilometer.
 // THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
-
-
 
 // Add map to the drivers section
 
@@ -99,21 +107,14 @@ class _MyAppState extends State<MyApp> {
 // get notification when the truck is at the drop off location.
 //! get notification to the driver when he is assigned a job.
 
-
 // calculate the distance between the driver and user.
 
 // COLOR SCHEME
-// Colors blue and white. 
-
-
+// Colors blue and white.
 
 //? put a home screen for the user, but not to come to the map directly.
 // e.g order a truck, track a truck, contact us, about us, terms and conditions, privacy policy, etc.
 
-
-
 // admin UI
 // should be able to see all the drivers and their details. plus users and their details.
 // should be able to see all the orders and their details.
-
-
