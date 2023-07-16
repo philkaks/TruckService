@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:upbox/homepage.dart';
 import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/services/location_provider.dart';
 
@@ -62,8 +63,9 @@ class _MyAppState extends State<MyApp> {
         home: const
             // AdminPage(),
             // Driver(),
+            HomePage(),
 
-            WidgetTree(),
+            // WidgetTree(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
@@ -105,7 +107,7 @@ class _MyAppState extends State<MyApp> {
 
 
 
-// put a home screen for the user, but not to come to the map directly.
+//? put a home screen for the user, but not to come to the map directly.
 // e.g order a truck, track a truck, contact us, about us, terms and conditions, privacy policy, etc.
 
 

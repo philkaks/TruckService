@@ -304,42 +304,42 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Future<dynamic> trackRide() async {
-    Fluttertoast.showToast(
-      msg: "Finding a truck",
-      gravity: ToastGravity.TOP,
-    );
-    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'images/locationpin.png',
-    );
-    Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-      driverGeo();
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(dGeo!.latitude, dGeo!.longitude),
-            zoom: 15.47,
-            tilt: 50,
-          ),
-        ),
-      );
-      setState(() {
-        _markers.add(
-          Marker(
-            visible: true,
-            draggable: false,
-            infoWindow: const InfoWindow(title: "Truck location"),
-            markerId: const MarkerId('track_marker'),
-            position: LatLng(dGeo!.latitude, dGeo!.longitude),
-            icon: customIcon,
-          ),
-        );
-      });
-    });
-    // lat and lng converter
-  }
+  // Future<dynamic> trackRide() async {
+  //   Fluttertoast.showToast(
+  //     msg: "Finding a truck",
+  //     gravity: ToastGravity.TOP,
+  //   );
+  //   BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+  //     const ImageConfiguration(size: Size(48, 48)),
+  //     'images/locationpin.png',
+  //   );
+  //   Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+  //     driverGeo();
+  //     final GoogleMapController controller = await _controller.future;
+  //     controller.animateCamera(
+  //       CameraUpdate.newCameraPosition(
+  //         CameraPosition(
+  //           target: LatLng(dGeo!.latitude, dGeo!.longitude),
+  //           zoom: 15.47,
+  //           tilt: 50,
+  //         ),
+  //       ),
+  //     );
+  //     setState(() {
+  //       _markers.add(
+  //         Marker(
+  //           visible: true,
+  //           draggable: false,
+  //           infoWindow: const InfoWindow(title: "Truck location"),
+  //           markerId: const MarkerId('track_marker'),
+  //           position: LatLng(dGeo!.latitude, dGeo!.longitude),
+  //           icon: customIcon,
+  //         ),
+  //       );
+  //     });
+  //   });
+  //   // lat and lng converter
+  // }
 
   void endRide() async {
     // FirebaseFirestore.instance.collection('drivers').doc(dId).update({
@@ -422,9 +422,9 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     getData();
-    trackRide();
+    // trackRide();
     getDis();
-    // drawRide();
+    drawRide();
     // showDriverDetails();
   }
 
