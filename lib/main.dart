@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:upbox/homepage.dart';
+import 'package:upbox/providers.dart';
+import 'package:upbox/services/widget_tree.dart';
 
 import 'firebase_options.dart';
+import 'homepage.dart';
 // import 'package:upbox/pages/app_start.dart';
 // import 'package:upbox/services/location_provider.dart';
 
@@ -20,16 +21,15 @@ import 'firebase_options.dart';
 //       systemNavigationBarContrastEnforced: false,
 //     ),
 //   );
-  
 
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-  //     overlays: [SystemUiOverlay.top]);
+// SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+//     overlays: [SystemUiOverlay.top]);
 
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+// WidgetsFlutterBinding.ensureInitialized();
+// await Firebase.initializeApp();
 
-  // await dotenv.load(fileName: '.env');
-  // await Future.delayed(const Duration(seconds: 3));
+// await dotenv.load(fileName: '.env');
+// await Future.delayed(const Duration(seconds: 3));
 //   runApp(const MyApp());
 // }
 
@@ -38,8 +38,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const HomePage());
-} 
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -58,12 +58,13 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Work_Sans",
           brightness: Brightness.light,
         ),
-        home: const
+        home:
             // AdminPage(),
             // Driver(),
-            HomePage(),
+            // HomePage(),
+            // MapScreen(),
 
-        // WidgetTree(),
+        WidgetTree(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
@@ -85,20 +86,31 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+
+
+
+
+
+
 // TODO: THESE CHANGES BELOW SUGGESTED BY THE CLIENT SHOULD BE IMPLEMENTED.
+// ?completed
+// pending
+
+
+
 // the map should focus on the point of focus.
 //? the suggestion should be brought up when the user is typing.
 
 //? CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
-// consider the nature of the goods.
+//? consider the nature of the goods.
 
 //? small sized truck
 //? large
 //? medium
-// this determines price per kilometer.
+//? this determines price per kilometer.
 // THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
 
-// Add map to the drivers section
+//? Add map to the drivers section
 
 // order for a truck.
 

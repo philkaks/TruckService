@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:upbox/pages/app_start.dart';
-import 'package:upbox/pages/intro-screens/onboarding_screen.dart';
+import 'package:upbox/homepage.dart';
 import 'package:upbox/services/auth.dart';
 
 import '../pages/authentication/user_login.dart';
@@ -20,7 +19,7 @@ class _WidgetTreeState extends State<WidgetTree> {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const AppStart();
+          return const HomePage();
         } else {
           return const LoginPage();
           // OnboardingScreen();

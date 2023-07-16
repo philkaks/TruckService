@@ -228,26 +228,26 @@ class _LocSetState extends State<LocSet> {
               Container(
                 alignment: const Alignment(0, 0.7),
                 child: ElevatedButton(
-                  onPressed:
-                      inputOne.text.isNotEmpty && inputTwo.text.isNotEmpty
-                          ? () {
-                              Navigator.of(context).push(
-                                PageTransition(
-                                  child: MainScreen(
-                                    sourceLocationName: inputOne.text,
-                                    destinationName: inputTwo.text,
-                                    cNAme: countryName.toString(),
-                                    // sName: state.toString(),
-                                  ),
-                                  childCurrent: widget,
-                                  type: PageTransitionType.rightToLeftJoined,
-                                  duration: const Duration(milliseconds: 200),
-                                  reverseDuration:
-                                      const Duration(milliseconds: 200),
-                                ),
-                              );
-                            }
-                          : null,
+                  onPressed: inputOne.text.isNotEmpty == true &&
+                          inputTwo.text.isNotEmpty == true
+                      ? () {
+                          Navigator.of(context).push(
+                            PageTransition(
+                              child: MainScreen(
+                                sourceLocationName: inputOne.text,
+                                destinationName: inputTwo.text,
+                                cNAme: countryName.toString(),
+                                // sName: state.toString(),
+                              ),
+                              childCurrent: widget,
+                              type: PageTransitionType.rightToLeftJoined,
+                              duration: const Duration(milliseconds: 200),
+                              reverseDuration:
+                                  const Duration(milliseconds: 200),
+                            ),
+                          );
+                        }
+                      : null,
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.all(20),

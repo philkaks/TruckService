@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/order-selection/order_type.dart';
 import 'package:upbox/utils/app_drawer.dart';
@@ -15,19 +16,46 @@ class AppStart extends StatefulWidget {
 }
 
 class _AppStartState extends State<AppStart> {
-  final Completer<GoogleMapController> controller =
+  final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
   // static LatLng sourceLocation = const LatLng(9.0301, 7.4677);
   // static LatLng destination = const LatLng(9.0398, 7.5044);
 
   final LatLng _initialcameraposition = const LatLng(9.0765, 7.3986);
+  LocationData? _locationData;
+  final Location _location = Location();
 
   // final Location _location = Location();
+  Future<void> _getCurrentLocation() async {
+    try {
+      final locData = await _location.getLocation();
+      setState(() {
+        _locationData = locData;
+      });
+      if (_locationData != null) {
+        final controller = await _controller.future;
+        controller.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(
+                _locationData!.latitude!,
+                _locationData!.longitude!,
+              ),
+              zoom: 14,
+            ),
+          ),
+        );
+      }
+    } catch (error) {
+      return;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _getCurrentLocation();
     // Provider.of<LocationProvider>(context, listen: false).initialization();
   }
 
@@ -72,7 +100,7 @@ class _AppStartState extends State<AppStart> {
             ),
             DraggableScrollableSheet(
               expand: true,
-              // initialChildSize: 0.49,
+              initialChildSize: 0.4,
               // maxChildSize: 0.7,
               // minChildSize: 0.4,
               builder:
@@ -106,7 +134,7 @@ class _AppStartState extends State<AppStart> {
                         const SizedBox(height: 14),
                         const Center(
                           child: Text(
-                            "Deliver an item",
+                            "Deliver item(s)",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 27,
@@ -149,8 +177,8 @@ class _AppStartState extends State<AppStart> {
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
-                                  side:
-                                      const BorderSide(color: Colors.transparent),
+                                  side: const BorderSide(
+                                      color: Colors.transparent),
                                 ),
                               ),
                             ),
@@ -170,42 +198,6 @@ class _AppStartState extends State<AppStart> {
                           ),
                         ),
                         const SizedBox(height: 7),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color.fromARGB(255, 224, 224, 224)),
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                const EdgeInsets.all(14),
-                              ),
-                              shadowColor: MaterialStateProperty.all<Color>(
-                                  Colors.transparent),
-                              elevation: MaterialStateProperty.all(0),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  side:
-                                      const BorderSide(color: Colors.transparent),
-                                ),
-                              ),
-                            ),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Track your Delivery",
-                                  style: TextStyle(
-                                    color: Colors.black26,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -225,13 +217,24 @@ class _AppStartState extends State<AppStart> {
       myLocationEnabled: true,
       compassEnabled: false,
       mapType: MapType.normal,
-      initialCameraPosition: CameraPosition(
-        target: _initialcameraposition,
-        zoom: 15,
+      markers: (_locationData == null)
+          ? {}
+          : {
+              Marker(
+                markerId: const MarkerId('m1'),
+                position: LatLng(
+                  _locationData!.latitude!,
+                  _locationData!.longitude!,
+                ),
+              ),
+            },
+      initialCameraPosition: const CameraPosition(
+        target: LatLng(0, 0),
+        zoom: 14,
       ),
-      // onMapCreated: (GoogleMapController controller) {
-      //   controller.complete(controller);
-      // },
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
     );
   }
 }

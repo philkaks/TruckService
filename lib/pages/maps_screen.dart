@@ -6,14 +6,16 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:upbox/pages/app_start.dart';
+import 'package:upbox/providers.dart';
 import 'package:upbox/services/local_notification_service.dart';
 import 'package:upbox/services/location_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   final String sourceLocationName;
   final String destinationName;
   final String cNAme;
@@ -27,10 +29,10 @@ class MainScreen extends StatefulWidget {
   });
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   var dName;
   var dPlate;
   var dRating;
@@ -97,22 +99,7 @@ class _MainScreenState extends State<MainScreen> {
             color: Colors.white,
           ),
           child: FutureBuilder(
-            future: FirebaseFirestore.instance
-                .collection('drivers')
-                .where("driver_free", isEqualTo: true)
-                .where("state", isEqualTo: 'kampala')
-                .where("phoneNumberVerification", isEqualTo: true)
-                .get()
-                .then((value) {
-              // setState(() {
-              dName = value.docs[0]['name'];
-              dPlate = value.docs[0]['plateno'];
-              dRating = value.docs[0]['rating'];
-              dNumber = value.docs[0]['number'];
-              dArrived = value.docs[0]['driver_arrived'];
-              dRides = value.docs[0]['trips'];
-              dId = value.docs[0]['id'];
-            }),
+            future: getData(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text("${snapshot.error}");
@@ -298,48 +285,50 @@ class _MainScreenState extends State<MainScreen> {
       directions['bounds_ne'],
       directions['bounds_sw'],
     );
+// !here the polyline is visible when you use setState
+    // setState(() {
+    //   _setPolyline(directions['polyline_decoded']);
+    // });
 
-    setState(() {
-      _setPolyline(directions['polyline_decoded']);
-    });
+    _setPolyline(directions['polyline_decoded']);
   }
 
-  // Future<dynamic> trackRide() async {
-  //   Fluttertoast.showToast(
-  //     msg: "Finding a truck",
-  //     gravity: ToastGravity.TOP,
-  //   );
-  //   BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-  //     const ImageConfiguration(size: Size(48, 48)),
-  //     'images/locationpin.png',
-  //   );
-  //   Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-  //     driverGeo();
-  //     final GoogleMapController controller = await _controller.future;
-  //     controller.animateCamera(
-  //       CameraUpdate.newCameraPosition(
-  //         CameraPosition(
-  //           target: LatLng(dGeo!.latitude, dGeo!.longitude),
-  //           zoom: 15.47,
-  //           tilt: 50,
-  //         ),
-  //       ),
-  //     );
-  //     setState(() {
-  //       _markers.add(
-  //         Marker(
-  //           visible: true,
-  //           draggable: false,
-  //           infoWindow: const InfoWindow(title: "Truck location"),
-  //           markerId: const MarkerId('track_marker'),
-  //           position: LatLng(dGeo!.latitude, dGeo!.longitude),
-  //           icon: customIcon,
-  //         ),
-  //       );
-  //     });
-  //   });
-  //   // lat and lng converter
-  // }
+  Future<dynamic> trackRide() async {
+    Fluttertoast.showToast(
+      msg: "Finding a truck",
+      gravity: ToastGravity.TOP,
+    );
+    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'images/locationpin.png',
+    );
+    Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+      driverGeo();
+      final GoogleMapController controller = await _controller.future;
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(dGeo!.latitude, dGeo!.longitude),
+            zoom: 15.47,
+            tilt: 50,
+          ),
+        ),
+      );
+      setState(() {
+        _markers.add(
+          Marker(
+            visible: true,
+            draggable: false,
+            infoWindow: const InfoWindow(title: "Truck location"),
+            markerId: const MarkerId('track_marker'),
+            position: LatLng(dGeo!.latitude, dGeo!.longitude),
+            icon: customIcon,
+          ),
+        );
+      });
+    });
+    // lat and lng converter
+  }
 
   void endRide() async {
     // FirebaseFirestore.instance.collection('drivers').doc(dId).update({
@@ -414,6 +403,42 @@ class _MainScreenState extends State<MainScreen> {
     // debugPrint(directions['distance_km']['text']);
   }
 
+  double price = 0;
+  // pricePerTruck() {
+  //   if (ref.read(truckchosen.notifier).state == 1) {
+  //     return price = double.parse(
+  //           km.replaceAll(RegExp(r'[^0-9\.]'), ''),
+  //         ) *
+  //         3;
+  //   } else if (ref.read(truckchosen.notifier).state == 2) {
+  //     return price = double.parse(
+  //           km.replaceAll(RegExp(r'[^0-9\.]'), ''),
+  //         ) *
+  //         2;
+  //   } else if (ref.read(truckchosen.notifier).state == 3) {
+  //     return price = double.parse(
+  //           km.replaceAll(RegExp(r'[^0-9\.]'), ''),
+  //         ) *
+  //         1;
+  //   } else {
+  //     return price = 0;
+  //   }
+  // }
+  double pricePerTruck() {
+    final truckChosen = ref.read(truckchosen.notifier).state;
+    final double kmValue = double.parse(km.replaceAll(RegExp(r'[^0-9\.]'), ''));
+
+    if (truckChosen == 1) {
+      return kmValue * 3000;
+    } else if (truckChosen == 2000) {
+      return kmValue * 2;
+    } else if (truckChosen == 3) {
+      return kmValue * 1000;
+    } else {
+      return 0;
+    }
+  }
+
   // var price = double.parse('300000');
 
   var conditionMet = false;
@@ -422,9 +447,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     getData();
-    // trackRide();
+    trackRide();
     getDis();
-    drawRide();
+    // pricePerTruck(km);
+    // drawRide();
     // showDriverDetails();
   }
 
@@ -482,7 +508,7 @@ class _MainScreenState extends State<MainScreen> {
                                 snapshot.data!.docs[0]['driver_arrived'];
                             GeoPoint geopoint =
                                 snapshot.data!.docs[0]['driverLocation'];
-                            if (status == "true" ) {
+                            if (status == "true") {
                               // && !conditionMet
                               // FirebaseFirestore.instance
                               //     .collection('drivers')
@@ -495,7 +521,8 @@ class _MainScreenState extends State<MainScreen> {
                             }
                             if (status == "complete") {
                               NotificationService().showNotification(
-                                  title: "Upbox", body: "Ride is complete");
+                                  title: "TruckService",
+                                  body: "Ride is complete");
                               endRide();
                             }
 
@@ -592,11 +619,7 @@ class _MainScreenState extends State<MainScreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        'Shs. ${double.parse(
-                                                  km.replaceAll(
-                                                      RegExp(r'[^0-9\.]'), ''),
-                                                ) * 1000.0}'
-                                            .toString(),
+                                        'Shs. ${pricePerTruck()}'.toString(),
                                         style: const TextStyle(
                                           fontSize: 23,
                                           fontWeight: FontWeight.bold,
@@ -694,7 +717,16 @@ class _MainScreenState extends State<MainScreen> {
                                         Icons.location_on,
                                         color: Colors.red,
                                       ),
-                                      Text(widget.sourceLocationName),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.3,
+                                        child: Text(
+                                          widget.sourceLocationName,
+                                          style: const TextStyle(
+                                              overflow: TextOverflow.fade),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   Column(
@@ -703,7 +735,16 @@ class _MainScreenState extends State<MainScreen> {
                                         Icons.delivery_dining_outlined,
                                         color: Colors.orange,
                                       ),
-                                      Text(widget.destinationName),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.3,
+                                        child: Text(
+                                          widget.destinationName,
+                                          style: const TextStyle(
+                                              overflow: TextOverflow.fade),
+                                        ),
+                                      ),
                                     ],
                                   )
                                 ],
@@ -805,6 +846,8 @@ class _MainScreenState extends State<MainScreen> {
           15),
     );
 
-    _setMarker(LatLng(lat, lng));
+    setState(() {
+      _setMarker(LatLng(lat, lng));
+    });
   }
 }

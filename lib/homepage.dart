@@ -158,9 +158,7 @@ class ElevatedCard extends StatelessWidget {
                           color: Colors.white)),
                 ],
               ),
-            )
-            
-            ),
+            )),
       ),
     );
   }
