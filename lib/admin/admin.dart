@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:upbox/admin/admin_addser.dart';
 
 import '../services/auth.dart';
 import '../pages/authentication/user_login.dart';
@@ -29,13 +30,6 @@ class _AdminPageState extends State<AdminPage> {
       btnCancelColor: const Color.fromARGB(255, 199, 199, 199),
     ).show();
   }
-
-  // Future<int> getUsersCount() async {
-  //   final QuerySnapshot<Map<String, dynamic>> users =
-  //       await FirebaseFirestore.instance.collection('users').get();
-  //   print(users.docs.length);
-  //   return users.docs.length;
-  // }
 
   Future<void> signOut() async {
     Fluttertoast.showToast(
@@ -106,6 +100,9 @@ class _AdminPageState extends State<AdminPage> {
                       border: OutlineInputBorder(),
                       labelText: 'Name',
                     ),
+                    onChanged: (value) {
+                      newName = value;
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -125,6 +122,9 @@ class _AdminPageState extends State<AdminPage> {
                       border: OutlineInputBorder(),
                       labelText: 'email',
                     ),
+                    onChanged: (value) {
+                      newEmail = value;
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -133,18 +133,35 @@ class _AdminPageState extends State<AdminPage> {
                       border: OutlineInputBorder(),
                       labelText: 'image',
                     ),
+                    onChanged: (value) {
+                      newImage = value;
+                    },
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () async {
                       try {
-                        await FirebaseFirestore.instance
-                            .collection(category)
-                            .doc(docId)
-                            .update({
-                          'name': newName,
-                          'number': newPhoneNumber,
-                        }).then((value) => Navigator.of(context).pop());
+                        if (newName.isNotEmpty &&
+                            newPhoneNumber.isNotEmpty &&
+                            newEmail.isNotEmpty &&
+                            newImage.isNotEmpty) {
+                          await FirebaseFirestore.instance
+                              .collection(category)
+                              .doc(docId)
+                              .update({
+                            'name': newName,
+                            'number': newPhoneNumber,
+                            'email': newEmail,
+                            'image_url': newImage,
+                          }).then((value) => {
+                                    Fluttertoast.showToast(
+                                      msg: 'Details updated successfully!',
+                                      gravity: ToastGravity.TOP,
+                                      toastLength: Toast.LENGTH_SHORT,
+                                    ),
+                                    Navigator.of(context).pop(),
+                                  });
+                        }
 
                         // Close the overlay.
                         Fluttertoast.showToast(
@@ -153,7 +170,7 @@ class _AdminPageState extends State<AdminPage> {
                           toastLength: Toast.LENGTH_SHORT,
                         );
                       } catch (error) {
-                        print('Error updating details: $error');
+                        // print('Error updating details: $error');
                         Fluttertoast.showToast(
                           msg: 'Error updating details: $error',
                           gravity: ToastGravity.TOP,
@@ -164,8 +181,7 @@ class _AdminPageState extends State<AdminPage> {
                       // Update the details in Firestore using userId, newName, and newPhoneNumber.
                       // Close the overlay.
                     },
-                    child: const Text('Save Changes',
-                        style: TextStyle(color: Colors.white)),
+                    child: const Text('Update Details'),
                   ),
                 ],
               ),
@@ -176,7 +192,71 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  Future<void> deleteUser(String userId, String collection) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(collection)
+          .doc(userId)
+          .delete();
+      Fluttertoast.showToast(
+        msg: 'User details deleted successfully!',
+        gravity: ToastGravity.TOP,
+        toastLength: Toast.LENGTH_SHORT,
+      );
+    } catch (error) {
+      // print('Error deleting user details: $error');
+      Fluttertoast.showToast(
+        msg: 'Failed to delete user details. Please try again later.',
+        gravity: ToastGravity.TOP,
+        toastLength: Toast.LENGTH_SHORT,
+      );
+    }
+  }
+
+  Future<void> showDeleteConfirmation(String userId, String collection) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(24),
+          title: const Text(
+            'Confirm Delete',
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+          content: const Text('Are you sure you want to delete this user?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog without deleting.
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Delete the user details from Firestore using userId.
+                await deleteUser(userId, collection)
+                    .then((value) => Navigator.pop(context));
+                // Close the dialog after deletion.
+                Fluttertoast.showToast(
+                  msg: 'User details deleted successfully!',
+                  gravity: ToastGravity.TOP,
+                  toastLength: Toast.LENGTH_SHORT,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red, // Use red color for delete button.
+              ),
+              child:
+                  const Text('Delete', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   bool selectedcategory = false;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -257,12 +337,44 @@ class _AdminPageState extends State<AdminPage> {
             const SizedBox(
               height: 10,
             ),
-            Center(
-              child: Text(
-                selectedcategory ? 'Drivers Available' : 'Users Available',
-                style: const TextStyle(fontSize: 20),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  selectedcategory ? 'Drivers Available' : 'Users Available',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                IconButton(
+                  onPressed: () {
+                    if (selectedcategory) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AddInformation(collectionName: 'drivers'),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const AddInformation(collectionName: 'users'),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.create_new_folder_rounded,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
             ),
+
             const SizedBox(
               height: 20,
             ),
@@ -305,53 +417,63 @@ class _AdminPageState extends State<AdminPage> {
 
               return Card(
                 child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(data['image_url']),
-                  ),
-                  title: Text(data['name'],
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(data['number']),
-                  trailing: Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      data['phoneNumberVerification']
-                          ? const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                            )
-                          : const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                            ),
-                      Text(
+                    contentPadding: const EdgeInsets.all(10),
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(data['image_url']),
+                    ),
+                    title: Text(data['name'],
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(
+                        ' Tel: ${data['number']}  \n email: ${data['email']}'),
+                    trailing: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
                         data['phoneNumberVerification']
-                            ? 'Verified'
-                            : 'Not Verified',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                            color: data['phoneNumberVerification']
-                                ? Colors.green
-                                : Colors.red),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    _editDetailsOverlay(
-                      // Pass the collection name here
-                      document.id, // Pass the user/driver ID
-                      data['name'],
-                      data['number'],
-                      data['email'],
-                      data['image_url'],
-                      'drivers',
-                    );
-                  },
+                            ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.cancel,
+                                color: Colors.red,
+                              ),
+                        Text(
+                          data['phoneNumberVerification']
+                              ? 'Verified'
+                              : 'Not Verified',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                              color: data['phoneNumberVerification']
+                                  ? Colors.green
+                                  : Colors.red),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      _editDetailsOverlay(
+                        // Pass the collection name here
+                        document.id, // Pass the user/driver ID
+                        data['name'],
+                        data['number'],
+                        data['email'],
+                        data['image_url'],
+                        'drivers',
+                      );
+                    },
+                    onLongPress: () {
+                      showDeleteConfirmation(
+                        // Pass the collection name here
+                        document.id, // Pass the user/driver ID
+                        'drivers',
+                      );
+                    }
 
-                  // Add more widgets to display other document fields as needed
-                ),
+                    // Add more widgets to display other document fields as needed
+                    ),
               );
             },
           );
@@ -424,6 +546,14 @@ class _AdminPageState extends State<AdminPage> {
                       data['email'],
                       data['image_url'],
                       'users', // Pass the collection name here
+                    );
+                  },
+
+                  onLongPress: () {
+                    showDeleteConfirmation(
+                      // Pass the collection name here
+                      document.id, // Pass the user/driver ID
+                      'users',
                     );
                   },
                 ),

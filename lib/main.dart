@@ -2,11 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:upbox/providers.dart';
-import 'package:upbox/services/widget_tree.dart';
 
 import 'firebase_options.dart';
-import 'homepage.dart';
 import 'admin/admin.dart';
 // import 'package:upbox/pages/app_start.dart';
 // import 'package:upbox/services/location_provider.dart';
@@ -127,6 +124,8 @@ class _MyAppState extends State<MyApp> {
 //? put a home screen for the user, but not to come to the map directly.
 //? e.g order a truck, track a truck, contact us, about us, terms and conditions, privacy policy, etc.
 
-// admin UI
-// should be able to see all the drivers and their details. plus users and their details.
-// should be able to see all the orders and their details.
+// ? admin UI
+// ? should be able to see all the drivers and their details. plus users and their details.
+// ? should be able to see all the orders and their details.
+// ? CRUD operations on the admin side.
+
