@@ -243,7 +243,7 @@ class _OrderTypeState extends State<OrderType> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Continue",
+                        "Order Truck Now",
                         style: TextStyle(
                           color: Colors.white,
                         ),

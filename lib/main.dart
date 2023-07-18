@@ -4,32 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';
-import 'admin/admin.dart';
-// import 'package:upbox/pages/app_start.dart';
-// import 'package:upbox/services/location_provider.dart';
+import 'tracking.dart';
+import 'pages/maps_screen.dart';
+import 'services/widget_tree.dart';
 
-// Future<void> main() async {
-//   SystemChrome.setSystemUIOverlayStyle(
-//     const SystemUiOverlayStyle(
-//       statusBarColor: Colors.transparent,
-//       statusBarIconBrightness: Brightness.dark,
-//       statusBarBrightness: Brightness.dark,
-//       systemNavigationBarIconBrightness: Brightness.dark,
-//       systemNavigationBarColor: Colors.white,
-//       systemNavigationBarContrastEnforced: false,
-//     ),
-//   );
-
-// SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-//     overlays: [SystemUiOverlay.top]);
-
-// WidgetsFlutterBinding.ensureInitialized();
-// await Firebase.initializeApp();
-
-// await dotenv.load(fileName: '.env');
-// await Future.delayed(const Duration(seconds: 3));
-//   runApp(const MyApp());
-// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,12 +34,15 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Work_Sans",
           brightness: Brightness.light,
         ),
-        home: const AdminPage(),
-        // Driver(),
-        // HomePage(),
-        // MapScreen(),
+        home: const
+            // AdminPage(),
+            // Driver(),
+            // HomePage(),
+            // MapScreen(),
+            // MainScreen(sourceLocationName: 'kampala', destinationName: 'entebbe', ),
 
-        // WidgetTree(),
+            WidgetTree(),
+            // OrderScreen(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
@@ -105,11 +86,15 @@ class _MyAppState extends State<MyApp> {
 //? large
 //? medium
 //? this determines price per kilometer.
-// THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
-
 //? Add map to the drivers section
 
-// order for a truck.
+// the driver should be able to see the map and the location of the user. and vice versa.
+// THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
+// update the location of user and driver to the database.
+
+
+//? order for a truck.
+
 
 // get notification when the truck is on the way.
 // get notification when the truck is at the pickup location.

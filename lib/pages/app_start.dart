@@ -1,28 +1,33 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/order-selection/order_type.dart';
 import 'package:upbox/utils/app_drawer.dart';
 
-class AppStart extends StatefulWidget {
+import '../providers.dart';
+import '../services/auth.dart';
+
+class AppStart extends ConsumerStatefulWidget {
   const AppStart({super.key});
 
   @override
-  State<AppStart> createState() => _AppStartState();
+  ConsumerState<AppStart> createState() => _AppStartState();
 }
 
-class _AppStartState extends State<AppStart> {
+class _AppStartState extends ConsumerState<AppStart> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
   // static LatLng sourceLocation = const LatLng(9.0301, 7.4677);
   // static LatLng destination = const LatLng(9.0398, 7.5044);
 
-  final LatLng _initialcameraposition = const LatLng(9.0765, 7.3986);
+  // final LatLng _initialcameraposition = const LatLng(9.0765, 7.3986);
   LocationData? _locationData;
   final Location _location = Location();
 
@@ -30,8 +35,27 @@ class _AppStartState extends State<AppStart> {
   Future<void> _getCurrentLocation() async {
     try {
       final locData = await _location.getLocation();
+      final databasepush = FirebaseFirestore.instance
+          .collection('users')
+          .doc(Auth().currentUser!.uid);
+
+      _location.onLocationChanged.listen((LocationData currentLocation) {
+        databasepush.update({
+          'user_lat': currentLocation.latitude,
+          'user_lng': currentLocation.longitude,
+        });
+
+        // Use current location
+      });
+
       setState(() {
         _locationData = locData;
+        // give the data to the location provider
+        ref.read(locationProvider.notifier).state = LatLng(
+          _locationData!.latitude!,
+          _locationData!.longitude!,
+        );
+        
       });
       if (_locationData != null) {
         final controller = await _controller.future;

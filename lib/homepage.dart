@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'pages/app_start.dart';
 import 'dart:ui' as ui;
 
+import 'tracking.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -74,7 +76,12 @@ class HomePage extends StatelessWidget {
                     ElevatedCard(
                       title: 'Track',
                       subtitle: 'Track progress of your order',
-                      onTap: () => _onCardTapped(2),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TrackingPage(),
+                        ),
+                      ),
                     ),
                     ElevatedCard(
                       subtitle: 'Reach out to us',

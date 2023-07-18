@@ -236,7 +236,7 @@ class _LocSetState extends State<LocSet> {
                               child: MainScreen(
                                 sourceLocationName: inputOne.text,
                                 destinationName: inputTwo.text,
-                                cNAme: countryName.toString(),
+                                // cNAme: countryName.toString(),
                                 // sName: state.toString(),
                               ),
                               childCurrent: widget,
@@ -267,7 +267,7 @@ class _LocSetState extends State<LocSet> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Continue with this location",
+                        "Order Truck",
                         style: TextStyle(
                           color: Colors.white,
                         ),

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:async';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +17,13 @@ import 'package:url_launcher/url_launcher.dart';
 class MainScreen extends ConsumerStatefulWidget {
   final String sourceLocationName;
   final String destinationName;
-  final String cNAme;
+  // final String cNAme;
   // final String sName;
   const MainScreen({
     super.key,
     required this.sourceLocationName,
     required this.destinationName,
-    required this.cNAme,
+    // required this.cNAme,
     // required this.sName,
   });
 
@@ -40,6 +39,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   var dArrived;
   var dRides;
   var dId;
+
+  
   getData() async {
     FirebaseFirestore.instance
         .collection('drivers')
@@ -298,32 +299,34 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       msg: "Finding a truck",
       gravity: ToastGravity.TOP,
     );
-    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'images/locationpin.png',
-    );
+    // BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+    //   const ImageConfiguration(size: Size(48, 48)),
+    //   'images/locationpin.png',
+    // );
+    
     Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
       driverGeo();
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: LatLng(dGeo!.latitude, dGeo!.longitude),
-            zoom: 15.47,
-            tilt: 50,
-          ),
-        ),
-      );
+      // final GoogleMapController controller = await _controller.future;
+      // controller.animateCamera(
+      // CameraUpdate.newCameraPosition(
+      //   CameraPosition(
+      //     target: LatLng(dGeo!.latitude, dGeo!.longitude),
+      //     zoom: 15.47,
+      //     tilt: 50,
+      //   ),
+      // ),
+      // );
       setState(() {
         _markers.add(
           Marker(
-            visible: true,
-            draggable: false,
-            infoWindow: const InfoWindow(title: "Truck location"),
-            markerId: const MarkerId('track_marker'),
-            position: LatLng(dGeo!.latitude, dGeo!.longitude),
-            icon: customIcon,
-          ),
+              visible: true,
+              draggable: false,
+              infoWindow: const InfoWindow(title: "Truck location"),
+              markerId: const MarkerId('track_marker'),
+              position: LatLng(dGeo!.latitude, dGeo!.longitude),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueYellow,
+              )),
         );
       });
     });
@@ -430,9 +433,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     getData();
     trackRide();
     getDis();
-    
+    driverGeo();
     // drawRide();
-    // showDriverDetails();
+    showDriverDetails();
   }
 
   @override
@@ -487,16 +490,16 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                             }
                             var status =
                                 snapshot.data!.docs[0]['driver_arrived'];
-                            GeoPoint geopoint =
-                                snapshot.data!.docs[0]['driverLocation'];
+                            // GeoPoint geopoint =
+                            //     snapshot.data!.docs[0]['driverLocation'];
                             if (status == "true") {
                               // && !conditionMet
-                              // FirebaseFirestore.instance
-                              //     .collection('drivers')
-                              //     .doc(dId!)
-                              //     .update({
-                              //   "driver_free": "false",
-                              // });
+                              FirebaseFirestore.instance
+                                  .collection('drivers')
+                                  .doc(dId!)
+                                  .update({
+                                "driver_free": "false",
+                              });
                               drawRide();
                               // conditionMet = true;
                             }
@@ -521,15 +524,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               myLocationButtonEnabled: false,
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(
-                                  geopoint.latitude,
-                                  geopoint.longitude,
+                                  dGeo!.latitude,
+                                  dGeo!.longitude,
                                 ),
                                 zoom: 10,
                               ),
-                              // onMapCreated:
-                              //     (GoogleMapController controller) async {
-                              //   _controller.complete(controller);
-                              // },
+                              onMapCreated: (GoogleMapController controller) {
+                                _controller.complete(controller);
+                              },
                             );
                           },
                         ),
@@ -736,6 +738,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               ElevatedButton(
                                 onPressed: _showDialogCancelRide,
                                 style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.blue),
                                   padding:
                                       MaterialStateProperty.all<EdgeInsets>(
                                     const EdgeInsets.all(10),
@@ -818,6 +823,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ),
     );
 
+// create bounding box for the map zoom
     controller.animateCamera(
       CameraUpdate.newLatLngBounds(
           LatLngBounds(
