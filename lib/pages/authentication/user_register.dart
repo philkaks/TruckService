@@ -109,8 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'email': email,
       'password': password,
       'number': 'unknown',
-      'user_lat': 'unknown',
-      'user_lng': 'unknown',
+      'userLocation':const GeoPoint(0.0, 0.0),
       'userType': 'users',
       'phoneNumberVerification': false,
       'image_url':

@@ -47,8 +47,7 @@ class _SignUpScreenState extends State<AddInformation> {
           // Add other fields as needed...
           'phoneNumberVerification': false,
           'id': userId,
-          'user_lat': '0.0',
-          'user_lng': '0.0',
+          'userLocation': const GeoPoint(0.0, 0.0),
         });
       } else if (collectionName == 'drivers') {
         await usersCollection.doc(userId).set({
@@ -61,13 +60,13 @@ class _SignUpScreenState extends State<AddInformation> {
           // Add other fields as needed...
           'phoneNumberVerification': false,
           'id': userId,
-          'user_lat': '0.0',
-          'user_lng': '0.0',
+          'driverLocation': const GeoPoint(0.0, 0.0),
           'driver_arrived': 'true',
           'driver_free': true,
           'trips': 0,
           'rating': 0.0,
           'plateno': 'ABC-123',
+          'state': 'kampala',
         });
       }
 
