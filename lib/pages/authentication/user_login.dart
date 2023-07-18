@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/admin/admin.dart';
-import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/pages/authentication/user_register.dart';
 import 'package:upbox/pages/driver.dart';
 import 'package:upbox/services/auth.dart';
+import 'package:upbox/homepage.dart';
 
 // import '../intro-screens/dropdown.dart';
 
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
               .then(
                 (value) => Navigator.of(context).push(
                   MaterialPageRoute(builder: (BuildContext context) {
-                    return const AppStart();
+                    return const HomePage();
                   }),
                 ),
               );

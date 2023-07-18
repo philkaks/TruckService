@@ -8,7 +8,6 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:upbox/pages/app_start.dart';
 import 'package:upbox/providers.dart';
 import 'package:upbox/services/local_notification_service.dart';
 import 'package:upbox/services/location_service.dart';
@@ -17,14 +16,14 @@ import 'package:url_launcher/url_launcher.dart';
 class MainScreen extends ConsumerStatefulWidget {
   final String sourceLocationName;
   final String destinationName;
-  // final String cNAme;
-  // final String sName;
+  final String cNAme;
+  final String sName;
   const MainScreen({
     super.key,
     required this.sourceLocationName,
     required this.destinationName,
-    // required this.cNAme,
-    // required this.sName,
+    required this.cNAme,
+    required this.sName,
   });
 
   @override
@@ -40,8 +39,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   var dRides;
   var dId;
 
-  
-  getData() async {
+  // ! remove the static state and pass in the state from the api
+  getData(String state) async {
     FirebaseFirestore.instance
         .collection('drivers')
         .where("driver_free", isEqualTo: true)
@@ -49,17 +48,28 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         .where("phoneNumberVerification", isEqualTo: true)
         .get()
         .then((value) {
+      if (value.docs.isEmpty) {
+        Fluttertoast.showToast(
+          msg: "loading...",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: const Color.fromARGB(255, 199, 199, 199),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else {
+        dName = value.docs[0]['name'];
+        dPlate = value.docs[0]['plateno'];
+        dRating = value.docs[0]['rating'];
+        dNumber = value.docs[0]['number'];
+        dArrived = value.docs[0]['driver_arrived'];
+        dRides = value.docs[0]['trips'];
+        dId = value.docs[0]['id'];
+      }
       // for (var element in value.docs) {
       //   print(element['name']);
       // }
-
-      dName = value.docs[0]['name'];
-      dPlate = value.docs[0]['plateno'];
-      dRating = value.docs[0]['rating'];
-      dNumber = value.docs[0]['number'];
-      dArrived = value.docs[0]['driver_arrived'];
-      dRides = value.docs[0]['trips'];
-      dId = value.docs[0]['id'];
     });
   }
 
@@ -100,7 +110,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             color: Colors.white,
           ),
           child: FutureBuilder(
-            future: getData(),
+            future: getData(widget.sName),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Text("${snapshot.error}");
@@ -303,7 +313,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     //   const ImageConfiguration(size: Size(48, 48)),
     //   'images/locationpin.png',
     // );
-    
+
     Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
       driverGeo();
       // final GoogleMapController controller = await _controller.future;
@@ -325,7 +335,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               markerId: const MarkerId('track_marker'),
               position: LatLng(dGeo!.latitude, dGeo!.longitude),
               icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueYellow,
+                BitmapDescriptor.hueRed,
               )),
         );
       });
@@ -334,25 +344,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   void endRide() async {
-    // FirebaseFirestore.instance.collection('drivers').doc(dId).update({
-    //   "driver_free": "true",
-    //   "driver_arrived": "waiting",
-    // });
-    _polylines.clear();
-    _markers.clear();
-    Fluttertoast.showToast(
-      msg: "TruckService canceled",
-      gravity: ToastGravity.TOP,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-    );
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (BuildContext context) {
-          return const AppStart();
-        },
-      ),
-    );
+    FirebaseFirestore.instance.collection('drivers').doc(dId).update({
+      "driver_free": true,
+      "driver_arrived": "waiting",
+    }).then((value) => {
+          _polylines.clear(),
+          _markers.clear(),
+          Fluttertoast.showToast(
+            msg: "Thank you for using TruckService",
+            gravity: ToastGravity.TOP,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+          ),
+          Navigator.of(context).pop(),
+        });
   }
 
   void _setMarker(LatLng points) {
@@ -413,11 +418,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final double kmValue = double.parse(km.replaceAll(RegExp(r'[^0-9\.]'), ''));
 
     if (truckChosen == 1) {
-      return kmValue * 3000;
+      return kmValue * 3000.toInt();
     } else if (truckChosen == 2000) {
-      return kmValue * 2;
+      return kmValue * 2.toInt();
     } else if (truckChosen == 3) {
-      return kmValue * 1000;
+      return kmValue * 1000.toInt();
     } else {
       return 0;
     }
@@ -430,12 +435,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
+    getData(widget.sName);
     trackRide();
     getDis();
-    driverGeo();
-    // drawRide();
     showDriverDetails();
+
+    // ? these were replicates
+    // getData();
+    // driverGeo();
+    // drawRide();
   }
 
   @override
@@ -490,24 +498,26 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                             }
                             var status =
                                 snapshot.data!.docs[0]['driver_arrived'];
-                            // GeoPoint geopoint =
-                            //     snapshot.data!.docs[0]['driverLocation'];
+
                             if (status == "true") {
                               // && !conditionMet
                               FirebaseFirestore.instance
                                   .collection('drivers')
-                                  .doc(dId!)
+                                  .doc(dId)
                                   .update({
-                                "driver_free": "false",
-                              });
-                              drawRide();
+                                "driver_free": false,
+                              }).then((value) => {
+                                        drawRide(),
+                                      });
+
                               // conditionMet = true;
                             }
                             if (status == "complete") {
-                              NotificationService().showNotification(
-                                  title: "TruckService",
-                                  body: "Ride is complete");
-                              endRide();
+                              NotificationService()
+                                  .showNotification(
+                                      title: "TruckService",
+                                      body: "Ride is complete")
+                                  .then((value) => endRide());
                             }
 
                             return GoogleMap(
@@ -527,7 +537,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                   dGeo!.latitude,
                                   dGeo!.longitude,
                                 ),
-                                zoom: 10,
+                                zoom: 14,
                               ),
                               onMapCreated: (GoogleMapController controller) {
                                 _controller.complete(controller);
@@ -599,14 +609,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                       ),
                                     ),
                                   ),
-                                  Row(
+                                  Wrap(
+                                    direction: Axis.horizontal,
                                     children: [
-                                      Text(
-                                        'Shs. ${pricePerTruck()}'.toString(),
-                                        style: const TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.orange,
+                                      Chip(
+                                        backgroundColor: Colors.grey[100],
+                                        label: Text(
+                                          'Shs. ${pricePerTruck().toInt()}',
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.orange,
+                                          ),
                                         ),
                                       ),
                                     ],

@@ -236,8 +236,8 @@ class _LocSetState extends State<LocSet> {
                               child: MainScreen(
                                 sourceLocationName: inputOne.text,
                                 destinationName: inputTwo.text,
-                                // cNAme: countryName.toString(),
-                                // sName: state.toString(),
+                                cNAme: countryName.toString(),
+                                sName: state.toString(),
                               ),
                               childCurrent: widget,
                               type: PageTransitionType.rightToLeftJoined,

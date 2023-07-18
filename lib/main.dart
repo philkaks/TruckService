@@ -2,12 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'firebase_options.dart';
-import 'tracking.dart';
-import 'pages/maps_screen.dart';
+import 'services/local_notification_service.dart';
 import 'services/widget_tree.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +24,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+    // Initialise  localnotification
+    NotificationService().initNotification();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
@@ -42,27 +47,23 @@ class _MyAppState extends State<MyApp> {
             // MainScreen(sourceLocationName: 'kampala', destinationName: 'entebbe', ),
 
             WidgetTree(),
-            // OrderScreen(),
+        // OrderScreen(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
       ),
     );
-    // MultiProvider(
-    // providers: [
-    // ChangeNotifierProvider(
-    //   create: (context) => LocationProvider(),
-    //   child: const AppStart(),
-    // ),
-
-    // ChangeNotifierProvider(
-    //   create: (context) => GoogleSignInProvider(),
-    //   child: const LoginPage(),
-    // )
-    // ],
-    //   child:
-    // );
   }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -73,8 +74,6 @@ class _MyAppState extends State<MyApp> {
 // TODO: THESE CHANGES BELOW SUGGESTED BY THE CLIENT SHOULD BE IMPLEMENTED.
 // ?completed
 // pending
-
-
 
 // the map should focus on the point of focus.
 //? the suggestion should be brought up when the user is typing.
@@ -92,9 +91,7 @@ class _MyAppState extends State<MyApp> {
 // THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
 // update the location of user and driver to the database.
 
-
 //? order for a truck.
-
 
 // get notification when the truck is on the way.
 // get notification when the truck is at the pickup location.
@@ -113,4 +110,3 @@ class _MyAppState extends State<MyApp> {
 // ? should be able to see all the drivers and their details. plus users and their details.
 // ? should be able to see all the orders and their details.
 // ? CRUD operations on the admin side.
-

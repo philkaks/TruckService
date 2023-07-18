@@ -60,6 +60,7 @@ class _AppStartState extends ConsumerState<AppStart> {
       if (_locationData != null) {
         final controller = await _controller.future;
         controller.animateCamera(
+          
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: LatLng(
