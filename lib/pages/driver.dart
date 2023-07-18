@@ -124,6 +124,7 @@ class _Driver extends State<Driver> {
     super.initState();
     _getCurrentLocation();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -200,17 +201,22 @@ class _Driver extends State<Driver> {
                                 ),
                               ),
                               // const SizedBox(height: 30),
-                              Text(
-                                data['number'].toString(),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 16,
-                                ),
-                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text('Status'),
+                                  Text(
+                                    data['number'].toString(),
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  const Text(
+                                    'Status',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                   const SizedBox(width: 10),
                                   data['phoneNumberVerification']
                                       ? const Icon(
@@ -223,6 +229,31 @@ class _Driver extends State<Driver> {
                                           color: Colors.red,
                                           size: 20,
                                         ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Chip(
+                                    backgroundColor: Colors.green[100],
+                                    label: const Text('Start Trip'),
+                                    avatar: const Icon(Icons.forward_outlined,
+                                        color: Colors.green),
+                                  ),
+                                  // SizedBox(
+                                  //     width: MediaQuery.of(context).size.width /
+                                  //         4.4),
+                                  const SizedBox(width: 10),
+
+                                  const SizedBox(width: 10),
+
+                                  Chip(
+                                    backgroundColor: Colors.red[100],
+                                    label: const Text('End Trip'),
+                                    avatar: const Icon(
+                                        Icons.stop_circle_outlined,
+                                        color: Colors.red),
+                                  ),
                                 ],
                               )
                             ],
