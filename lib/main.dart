@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:upbox/pages/driver.dart';
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'firebase_options.dart';
 import 'services/local_notification_service.dart';
@@ -41,12 +42,12 @@ class _MyAppState extends State<MyApp> {
         ),
         home: const
             // AdminPage(),
-            // Driver(),
+            Driver(),
             // HomePage(),
             // MapScreen(),
             // MainScreen(sourceLocationName: 'kampala', destinationName: 'entebbe', ),
 
-            WidgetTree(),
+            // WidgetTree(),
         // OrderScreen(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,

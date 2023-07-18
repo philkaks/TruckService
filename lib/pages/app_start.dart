@@ -41,8 +41,7 @@ class _AppStartState extends ConsumerState<AppStart> {
 
       _location.onLocationChanged.listen((LocationData currentLocation) {
         databasepush.update({
-          'user_lat': currentLocation.latitude,
-          'user_lng': currentLocation.longitude,
+         'userLocation':GeoPoint(currentLocation.latitude!, currentLocation.longitude!)
         });
 
         // Use current location

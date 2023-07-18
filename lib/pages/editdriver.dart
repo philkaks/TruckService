@@ -25,7 +25,7 @@ class _EditDriverState extends State<EditDriver> {
         .where('id', isEqualTo: user!.uid)
         .get()
         .then((value) {
-      name = value.docs[0]['username'];
+      name = value.docs[0]['name'];
       email = value.docs[0]['email'];
     });
   }
@@ -132,7 +132,7 @@ class _EditDriverState extends State<EditDriver> {
               TextFormField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "First name",
+                  hintText: "Name",
                 ),
               ),
               const SizedBox(height: 20),
@@ -144,7 +144,9 @@ class _EditDriverState extends State<EditDriver> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  updateData(_nameUpdate.text, _emailUpdate.text);
+                },
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(
                     const EdgeInsets.all(20),

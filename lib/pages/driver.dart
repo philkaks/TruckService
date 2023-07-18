@@ -1,5 +1,4 @@
-// import 'package:awesome_dialog/awesome_dialog.dart';
-// ignore_for_file: prefer_typing_uninitialized_variables
+import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
@@ -29,6 +29,8 @@ class _Driver extends State<Driver> {
           .collection('drivers')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .snapshots();
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
 
 // final page = AccountPage();
   void _showAction() {
@@ -65,7 +67,63 @@ class _Driver extends State<Driver> {
         );
   }
 
+  LocationData? _locationData;
+  final Location _location = Location();
+
+  // final Location _location = Location();
+  Future<void> _getCurrentLocation() async {
+    try {
+      final locData = await _location.getLocation();
+      final databasepush = FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(Auth().currentUser!.uid);
+
+      _location.onLocationChanged.listen((LocationData currentLocation) {
+        databasepush.update({
+          'driverLocation': GeoPoint(
+            currentLocation.latitude!,
+            currentLocation.longitude!,
+          ),
+          // 'latitude': currentLocation.latitude,
+          // 'longitude': currentLocation.longitude,
+        });
+
+        // Use current location
+      });
+
+      setState(() {
+        _locationData = locData;
+        // give the data to the location provider
+        // ref.read(locationProvider.notifier).state = LatLng(
+        //   _locationData!.latitude!,
+        //   _locationData!.longitude!,
+        // );
+      });
+      if (_locationData != null) {
+        final controller = await _controller.future;
+        controller.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(
+                _locationData!.latitude!,
+                _locationData!.longitude!,
+              ),
+              zoom: 14,
+            ),
+          ),
+        );
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
   String drivername = 'paul';
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -131,7 +189,7 @@ class _Driver extends State<Driver> {
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                 ),
-                                child: googleMapUI(),
+                                child: googlemapsUI(),
                               ),
 
                               const SizedBox(height: 10),
@@ -334,21 +392,32 @@ class _Driver extends State<Driver> {
       ),
     );
   }
-}
 
-Widget googleMapUI() {
-  return const GoogleMap(
-    trafficEnabled: false,
-    myLocationButtonEnabled: false,
-    myLocationEnabled: true,
-    compassEnabled: false,
-    mapType: MapType.normal,
-    initialCameraPosition: CameraPosition(
-      target: LatLng(0.347596, 32.582520),
-      zoom: 15,
-    ),
-    // onMapCreated: (GoogleMapController controller) {
-    //   controller.complete(controller);
-    // },
-  );
+  GoogleMap googlemapsUI() {
+    return GoogleMap(
+      trafficEnabled: false,
+      myLocationButtonEnabled: false,
+      myLocationEnabled: true,
+      compassEnabled: false,
+      mapType: MapType.normal,
+      markers: (_locationData == null)
+          ? {}
+          : {
+              Marker(
+                markerId: const MarkerId('m2'),
+                position: LatLng(
+                  _locationData!.latitude!,
+                  _locationData!.longitude!,
+                ),
+              ),
+            },
+      initialCameraPosition: const CameraPosition(
+        target: LatLng(0, 0),
+        zoom: 14,
+      ),
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+    );
+  }
 }
