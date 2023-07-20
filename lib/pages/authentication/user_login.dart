@@ -269,9 +269,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       TextFormField(
                         controller: _controllerPassword,
-                        onEditingComplete: () {
-                          signInWithEmailAndPassword();
-                        },
+                        // onEditingComplete: () {
+                        //   signInWithEmailAndPassword();
+                        // },
                         autocorrect: false,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -293,9 +293,9 @@ class _LoginPageState extends State<LoginPage> {
                       selectedValue == 3
                           ? TextFormField(
                               controller: _adminid,
-                              onEditingComplete: () {
-                                signInWithEmailAndPassword();
-                              },
+                              // onEditingComplete: () {
+                              //   signInWithEmailAndPassword();
+                              // },
                               autocorrect: false,
                               obscureText: true,
                               decoration: InputDecoration(
@@ -316,9 +316,9 @@ class _LoginPageState extends State<LoginPage> {
                       selectedValue == 2
                           ? TextFormField(
                               controller: _plateno,
-                              onEditingComplete: () {
-                                signInWithEmailAndPassword();
-                              },
+                              // onEditingComplete: () {
+                              //   signInWithEmailAndPassword();
+                              // },
                               autocorrect: false,
                               obscureText: true,
                               decoration: InputDecoration(

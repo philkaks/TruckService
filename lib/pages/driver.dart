@@ -12,6 +12,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:upbox/pages/authentication/user_login.dart';
 import 'package:upbox/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../services/local_notification_service.dart';
 import 'editdriver.dart';
 import 'reviews.dart';
 
@@ -69,6 +70,7 @@ class _Driver extends State<Driver> {
 
   LocationData? _locationData;
   final Location _location = Location();
+  NotificationService notificationService = NotificationService();
 
   // final Location _location = Location();
   Future<void> _getCurrentLocation() async {
@@ -117,8 +119,10 @@ class _Driver extends State<Driver> {
       return;
     }
   }
+  // function to get local notification
 
   String drivername = 'paul';
+
   @override
   void initState() {
     super.initState();
@@ -176,7 +180,14 @@ class _Driver extends State<Driver> {
                   final data = snapshot.data!.data();
 
                   if (data != null) {
+                    if (data['chosen'] == true) {
+                      NotificationService().showNotification(
+                        title: "TruckService",
+                        body: "You have an order",
+                      );
+                    }
                     drivername = data['name'].toString();
+                    // String   dId = ;
                     return Column(
                       children: [
                         const SizedBox(height: 20),
@@ -234,25 +245,64 @@ class _Driver extends State<Driver> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Chip(
-                                    backgroundColor: Colors.green[100],
-                                    label: const Text('Start Trip'),
-                                    avatar: const Icon(Icons.forward_outlined,
-                                        color: Colors.green),
+                                  InkWell(
+                                    onTap: () {
+                                      FirebaseFirestore.instance
+                                          .collection('drivers')
+                                          .doc(data['id'])
+                                          .update({
+                                        "driver_free": false,
+                                        'chosen': false,
+                                      });
+                                    },
+                                    child: Chip(
+                                      backgroundColor: Colors.green[100],
+                                      label: const Text('Start Trip'),
+                                      avatar: const Icon(Icons.forward_outlined,
+                                          color: Colors.green),
+                                    ),
                                   ),
                                   // SizedBox(
                                   //     width: MediaQuery.of(context).size.width /
                                   //         4.4),
                                   const SizedBox(width: 10),
+                                  InkWell(
+                                    onTap: () {
+                                      FirebaseFirestore.instance
+                                          .collection('drivers')
+                                          .doc(data['id'])
+                                          .update({
+                                        "driver_arrived": 'true',
+                                      });
+                                    },
+                                    child: Chip(
+                                      backgroundColor: Colors.blue[100],
+                                      label: const Text('Arrived'),
+                                      avatar: const Icon(
+                                          Icons.done_all_outlined,
+                                          color: Colors.blue),
+                                    ),
+                                  ),
 
                                   const SizedBox(width: 10),
 
-                                  Chip(
-                                    backgroundColor: Colors.red[100],
-                                    label: const Text('End Trip'),
-                                    avatar: const Icon(
-                                        Icons.stop_circle_outlined,
-                                        color: Colors.red),
+                                  InkWell(
+                                    onTap: () {
+                                      FirebaseFirestore.instance
+                                          .collection('drivers')
+                                          .doc(data['id'])
+                                          .update({
+                                        "driver_arrived": 'complete',
+                                        // 'chosen': false,
+                                      });
+                                    },
+                                    child: Chip(
+                                      backgroundColor: Colors.red[100],
+                                      label: const Text('End Trip'),
+                                      avatar: const Icon(
+                                          Icons.stop_circle_outlined,
+                                          color: Colors.red),
+                                    ),
                                   ),
                                 ],
                               )
@@ -262,6 +312,35 @@ class _Driver extends State<Driver> {
                         Expanded(
                           child: ListView(
                             children: [
+                              const Divider(
+                                height: 10,
+                              ),
+                              ListTile(
+                                trailing: const Icon(
+                                  Icons.phone,
+                                  color: Colors.blue,
+                                ),
+                                leading: const Icon(
+                                  Icons.call_end_rounded,
+                                  color: Colors.green,
+                                ),
+                                title: const Text(
+                                  "Contact Customer ",
+                                ),
+                                subtitle: const Text(
+                                  'Contact the customer incase of any issues',
+                                ),
+                                onTap: () async {
+                                  Uri phoneDr =
+                                      Uri.parse('tel:+256 770 429 423');
+
+                                  if (await launchUrl(phoneDr)) {
+                                    debugPrint("Phone number is okay");
+                                  } else {
+                                    debugPrint('phone number errror');
+                                  }
+                                },
+                              ),
                               const Divider(
                                 height: 10,
                               ),
@@ -299,13 +378,15 @@ class _Driver extends State<Driver> {
                                   Icons.car_repair_outlined,
                                   color: Colors.blue,
                                 ),
-                                title: const Text("Trips Made."),
+                                title: const Text('Trips'),
                                 subtitle: Text("${data['trips']} trips "),
-                                trailing: const Text(
-                                  "On-going trips: none",
-                                  style: TextStyle(color: Colors.green),
+                                trailing: Text(
+                                  data['driver_free'] ? 'NONE' : 'ONGOING',
+                                  style: const TextStyle(color: Colors.green),
                                 ),
-                                onTap: () {},
+                                onTap: () {
+                                  //todo add trip details such as customer name, destination location, destination, price, etc
+                                },
                               ),
                               const Divider(
                                 height: 10,
@@ -377,15 +458,6 @@ class _Driver extends State<Driver> {
                                     size: 21,
                                     color: Colors.red,
                                   ),
-                                  trailing: IconButton(
-                                      onPressed: () {
-                                        // _showAction('Confirm delete account!',
-                                        //     deleteAccount);
-                                      },
-                                      icon: const Icon(
-                                        Icons.delete_forever_outlined,
-                                        color: Colors.red,
-                                      )),
                                   title: const Text(
                                     "Log - out",
                                     style: TextStyle(

@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:upbox/pages/driver.dart';
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'firebase_options.dart';
 import 'services/local_notification_service.dart';
@@ -36,18 +35,23 @@ class _MyAppState extends State<MyApp> {
     return ProviderScope(
       child: MaterialApp(
         theme: ThemeData(
-          primarySwatch: Colors.orange,
+          primarySwatch: Colors.blue,
           fontFamily: "Work_Sans",
           brightness: Brightness.light,
+          iconTheme: const IconThemeData(color: Colors.black),
+          //   primaryColor: Colors.blue,
+          //   textTheme: TextTheme(
+
+          //   )
         ),
         home: const
             // AdminPage(),
-            Driver(),
+            // Driver(),
             // HomePage(),
             // MapScreen(),
             // MainScreen(sourceLocationName: 'kampala', destinationName: 'entebbe', ),
 
-            // WidgetTree(),
+            WidgetTree(),
         // OrderScreen(),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
@@ -72,11 +76,11 @@ class _MyAppState extends State<MyApp> {
 
 
 
-// TODO: THESE CHANGES BELOW SUGGESTED BY THE CLIENT SHOULD BE IMPLEMENTED.
+// TODO:IMPLEMENT THESE CHANGES BELOW .
 // ?completed
 // pending
 
-// the map should focus on the point of focus.
+//? the map should focus on the point of focus.
 //? the suggestion should be brought up when the user is typing.
 
 //? CALCULATE THE VALUE OF THE RIDE PER KILOMETER.
@@ -89,14 +93,14 @@ class _MyAppState extends State<MyApp> {
 //? Add map to the drivers section
 
 // the driver should be able to see the map and the location of the user. and vice versa.
-// THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
-// update the location of user and driver to the database.
+//? THE DRIVER SHOULD HAVE THE TYPE OF TRUCK HE HAS PUSHED TO THE DATABASE.
+//? update the location of user and driver to the database.
 
 //? order for a truck.
 
-// get notification when the truck is on the way.
-// get notification when the truck is at the pickup location.
-// get notification when the truck is at the drop off location.
+//? get notification when the truck is on the way.
+//? get notification when the truck is at the pickup location.
+//? get notification when the truck is at the drop off location.
 //! get notification to the driver when he is assigned a job.
 
 // calculate the distance between the driver and user.
@@ -111,3 +115,7 @@ class _MyAppState extends State<MyApp> {
 // ? should be able to see all the drivers and their details. plus users and their details.
 // ? should be able to see all the orders and their details.
 // ? CRUD operations on the admin side.
+
+
+// dont allow the user to put a number more thaan 10 digits.
+// add checks for the phone number.

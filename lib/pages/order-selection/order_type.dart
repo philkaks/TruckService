@@ -76,7 +76,7 @@ class _OrderTypeState extends State<OrderType> {
                               left: 8, right: 8, top: 4, bottom: 4),
                           decoration: BoxDecoration(
                             border: _isChecked == true
-                                ? Border.all(width: 2, color: Colors.orange)
+                                ? Border.all(width: 2, color: Colors.blue)
                                 : Border.all(
                                     width: 2,
                                     color: const Color.fromARGB(
@@ -102,7 +102,7 @@ class _OrderTypeState extends State<OrderType> {
                                 ref.read(truckchosen.notifier).state = 1;
                               });
                             },
-                            activeColor: Colors.orange,
+                            activeColor: Colors.blue,
                             checkColor: Colors.white,
                             subtitle: const Text(
                                 "select this option for delivery of large items,machines and equipment"),
@@ -117,7 +117,7 @@ class _OrderTypeState extends State<OrderType> {
                               left: 8, right: 8, top: 4, bottom: 4),
                           decoration: BoxDecoration(
                             border: _isChecked2 == true
-                                ? Border.all(width: 2, color: Colors.orange)
+                                ? Border.all(width: 2, color: Colors.blue)
                                 : Border.all(
                                     width: 2,
                                     color: const Color.fromARGB(
@@ -143,7 +143,7 @@ class _OrderTypeState extends State<OrderType> {
                                 ref.read(truckchosen.notifier).state = 2;
                               });
                             },
-                            activeColor: Colors.orange,
+                            activeColor: Colors.blue,
                             checkColor: Colors.white,
                             subtitle: const Text(
                                 "select this option for medium-sized items such as furniture, electronics, etc."),
@@ -158,7 +158,7 @@ class _OrderTypeState extends State<OrderType> {
                               left: 8, right: 8, top: 4, bottom: 4),
                           decoration: BoxDecoration(
                             border: _isChecked3 == true
-                                ? Border.all(width: 2, color: Colors.orange)
+                                ? Border.all(width: 2, color: Colors.blue)
                                 : Border.all(
                                     width: 2,
                                     color: const Color.fromARGB(
@@ -184,7 +184,7 @@ class _OrderTypeState extends State<OrderType> {
                                 ref.read(truckchosen.notifier).state = 3;
                               });
                             },
-                            activeColor: Colors.orange,
+                            activeColor: Colors.blue,
                             checkColor: Colors.white,
                             subtitle: const Text(
                                 "select this option for small items such as food, clothes, etc."),

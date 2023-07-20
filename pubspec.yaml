@@ -78,19 +78,19 @@ dev_dependencies:
 flutter_native_splash:
   android: true
   ios: true
-  color: "#fca311"
+  color: "#0000ff"
   image: images/start.png
   android_gravity: center
   ios_content_mode: center
   fullscreen: true
 
-  color_dark: "#fca311"
+  color_dark: "#0000ff"
   image_dark: images/start.png
 
   android_12:
     image: images/start.png
-    color: "#fca311"
-    color_dark: "#fca311"
+    color: "#0000ff"
+    color_dark: "#0000ff"
     image_dark: images/start.png
 
 flutter_icons:

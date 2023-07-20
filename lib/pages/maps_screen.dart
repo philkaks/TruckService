@@ -13,6 +13,7 @@ import 'package:upbox/services/local_notification_service.dart';
 import 'package:upbox/services/location_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class MainScreen extends ConsumerStatefulWidget {
   final String sourceLocationName;
   final String destinationName;
@@ -415,14 +416,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   double pricePerTruck() {
     final truckChosen = ref.read(truckchosen.notifier).state;
-    final double kmValue = double.parse(km.replaceAll(RegExp(r'[^0-9\.]'), ''));
+    // final double kmValue = double.parse(km?.replaceAll(RegExp(r'[^0-9\.]'), ''));
+    int kmValue = int.parse(km.toString().replaceAll(RegExp('[^0-9]'), ''));
 
     if (truckChosen == 1) {
-      return kmValue * 3000.toInt();
+      return kmValue * 3000;
     } else if (truckChosen == 2000) {
-      return kmValue * 2.toInt();
+      return kmValue * 2;
     } else if (truckChosen == 3) {
-      return kmValue * 1000.toInt();
+      return kmValue * 1000;
     } else {
       return 0;
     }
@@ -438,6 +440,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     getData(widget.sName);
     trackRide();
     getDis();
+    // pricePerTruck();
     showDriverDetails();
 
     // ? these were replicates
@@ -452,7 +455,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         centerTitle: true,
         elevation: 0,
         title: const Text(
@@ -478,73 +481,75 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 dId != null
             ? Stack(
                 children: [
-                  LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return SizedBox(
-                        child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('drivers')
-                              .where("name", isEqualTo: dName)
-                              .where("number", isEqualTo: dNumber)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            }
+                  FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('drivers')
+                        .where("name", isEqualTo: dName)
+                        .where("number", isEqualTo: dNumber)
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
 
-                            if (!snapshot.hasData || snapshot.data == null) {
-                              return const Text('No data available');
-                            }
-                            var status =
-                                snapshot.data!.docs[0]['driver_arrived'];
+                      if (!snapshot.hasData || snapshot.data == null) {
+                        return const Text('No data available');
+                      }
 
-                            if (status == "true") {
-                              // && !conditionMet
-                              FirebaseFirestore.instance
-                                  .collection('drivers')
-                                  .doc(dId)
-                                  .update({
-                                "driver_free": false,
-                              }).then((value) => {
-                                        drawRide(),
-                                      });
+                      var status = snapshot.data!.docs[0]['driver_arrived'];
+                      FirebaseFirestore.instance
+                          .collection('drivers')
+                          .doc(dId)
+                          .update({
+                        "chosen": true,
+                      });
 
-                              // conditionMet = true;
-                            }
-                            if (status == "complete") {
-                              NotificationService()
-                                  .showNotification(
-                                      title: "TruckService",
-                                      body: "Ride is complete")
-                                  .then((value) => endRide());
-                            }
+                      if (status == "true") {
+                        // && !conditionMet
+                        NotificationService()
+                            .showNotification(
+                                title: "TruckService",
+                                body: "Driver has arrived at the destination")
+                            .then((value) => FirebaseFirestore.instance
+                                    .collection('drivers')
+                                    .doc(dId)
+                                    .update({
+                                  "driver_free": true,
+                                }).then((value) => {
+                                          drawRide(),
+                                        }));
 
-                            return GoogleMap(
-                              compassEnabled: false,
-                              scrollGesturesEnabled: true,
-                              tiltGesturesEnabled: false,
-                              rotateGesturesEnabled: true,
-                              zoomControlsEnabled: true,
-                              zoomGesturesEnabled: true,
-                              markers: _markers,
-                              polylines: _polylines,
-                              mapType: MapType.normal,
-                              myLocationEnabled: false,
-                              myLocationButtonEnabled: false,
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(
-                                  dGeo!.latitude,
-                                  dGeo!.longitude,
-                                ),
-                                zoom: 14,
-                              ),
-                              onMapCreated: (GoogleMapController controller) {
-                                _controller.complete(controller);
-                              },
-                            );
-                          },
+                        // conditionMet = true;
+                      }
+                      if (status == "complete") {
+                        NotificationService()
+                            .showNotification(
+                                title: "TruckService", body: "Ride is complete")
+                            .then((value) => drawRide());
+                      }
+
+                      return GoogleMap(
+                        compassEnabled: false,
+                        scrollGesturesEnabled: true,
+                        tiltGesturesEnabled: false,
+                        rotateGesturesEnabled: true,
+                        zoomControlsEnabled: true,
+                        zoomGesturesEnabled: true,
+                        markers: _markers,
+                        polylines: _polylines,
+                        mapType: MapType.normal,
+                        myLocationEnabled: false,
+                        myLocationButtonEnabled: false,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            dGeo!.latitude,
+                            dGeo!.longitude,
+                          ),
+                          zoom: 14,
                         ),
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        },
                       );
                     },
                   ),
@@ -615,11 +620,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                       Chip(
                                         backgroundColor: Colors.grey[100],
                                         label: Text(
-                                          'Shs. ${pricePerTruck().toInt()}',
+                                          'Shs. ${pricePerTruck()}',
                                           style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.orange,
+                                            color: Colors.blue,
                                           ),
                                         ),
                                       ),
@@ -664,7 +669,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                         children: [
                                           const Icon(
                                             Icons.star,
-                                            color: Colors.orange,
+                                            color: Colors.blue,
                                             size: 12,
                                           ),
                                           Text(dRating.toString()),
@@ -730,7 +735,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                     children: [
                                       const Icon(
                                         Icons.delivery_dining_outlined,
-                                        color: Colors.orange,
+                                        color: Colors.blue,
                                       ),
                                       SizedBox(
                                         width:
@@ -810,7 +815,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       },
                       child: const Text(
                         "cancel search",
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: Colors.blue),
                       ),
                     ),
                   ],

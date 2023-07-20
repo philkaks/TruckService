@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<AddInformation> {
           'image_url':
               'https://images.unsplash.com/photo-1590079105886-f0f884bf4437?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=385&q=80',
           // Add other fields as needed...
-          'phoneNumberVerification': false,
+          'phoneNumberVerification': true,
           'id': userId,
           'userLocation': const GeoPoint(0.0, 0.0),
         });

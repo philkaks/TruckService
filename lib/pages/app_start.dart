@@ -93,7 +93,7 @@ class _AppStartState extends ConsumerState<AppStart> {
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
-            child: const Icon(Icons.menu),
+            child: const Icon(Icons.menu, color: Colors.black),
           );
         },
       ),

@@ -51,5 +51,9 @@ class NotificationService {
     );
   }
 
+  // Future<void> cancelNotification(int notificationId) async {
+  //   await notificationsPlugin.cancel(notificationId);
+  // }
+
   // End of NotificationService class
 }

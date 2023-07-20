@@ -53,6 +53,7 @@ class MyDrawer extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
                   );
                 }
@@ -65,7 +66,12 @@ class MyDrawer extends StatelessWidget {
                 );
               },
             ),
-            accountEmail: Text(user?.email ?? 'Loading...'),
+            accountEmail: Text(user?.email ?? 'Loading...',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                )),
             currentAccountPicture: const CircleAvatar(
               child: ClipOval(
                 child: Icon(Icons.person),

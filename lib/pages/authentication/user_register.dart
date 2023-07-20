@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'number': 'unknown',
       'userLocation':const GeoPoint(0.0, 0.0),
       'userType': 'users',
-      'phoneNumberVerification': false,
+      'phoneNumberVerification': true,
       'image_url':
           'https://images.unsplash.com/photo-1530785602389-07594beb8b73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     });
