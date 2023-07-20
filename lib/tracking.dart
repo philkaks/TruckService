@@ -17,7 +17,12 @@ class _TrackingPageState extends State<TrackingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text('Tracking ')),
+          backgroundColor: Colors.white,
+          title: const Center(
+              child: Text(
+            'Tracking ',
+            style: TextStyle(color: Colors.black),
+          )),
         ),
         body: GoogleMap(
           trafficEnabled: false,
