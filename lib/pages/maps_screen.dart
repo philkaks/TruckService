@@ -13,7 +13,6 @@ import 'package:upbox/services/local_notification_service.dart';
 import 'package:upbox/services/location_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class MainScreen extends ConsumerStatefulWidget {
   final String sourceLocationName;
   final String destinationName;
@@ -51,7 +50,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         .then((value) {
       if (value.docs.isEmpty) {
         Fluttertoast.showToast(
-          msg: "loading...",
+          msg: "No driver found",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -67,6 +66,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         dArrived = value.docs[0]['driver_arrived'];
         dRides = value.docs[0]['trips'];
         dId = value.docs[0]['id'];
+        dGeo = value.docs[0]['driverLocation'];
       }
       // for (var element in value.docs) {
       //   print(element['name']);
@@ -74,7 +74,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     });
   }
 
-  GeoPoint? dGeo;
+  late GeoPoint dGeo;
   driverGeo() async {
     FirebaseFirestore.instance
         .collection('drivers')
@@ -314,19 +314,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     //   const ImageConfiguration(size: Size(48, 48)),
     //   'images/locationpin.png',
     // );
+    final GoogleMapController controller = await _controller.future;
 
     Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-      driverGeo();
-      // final GoogleMapController controller = await _controller.future;
-      // controller.animateCamera(
-      // CameraUpdate.newCameraPosition(
-      //   CameraPosition(
-      //     target: LatLng(dGeo!.latitude, dGeo!.longitude),
-      //     zoom: 15.47,
-      //     tilt: 50,
-      //   ),
-      // ),
-      // );
+      // driverGeo().then((value) => {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(dGeo.latitude, dGeo.longitude),
+            zoom: 15.47,
+            tilt: 50,
+          ),
+        ),
+      );
+      // });
+
       setState(() {
         _markers.add(
           Marker(
@@ -334,7 +336,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               draggable: false,
               infoWindow: const InfoWindow(title: "Truck location"),
               markerId: const MarkerId('track_marker'),
-              position: LatLng(dGeo!.latitude, dGeo!.longitude),
+              position: LatLng(dGeo.latitude, dGeo.longitude),
               icon: BitmapDescriptor.defaultMarkerWithHue(
                 BitmapDescriptor.hueRed,
               )),
@@ -542,8 +544,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         myLocationButtonEnabled: false,
                         initialCameraPosition: CameraPosition(
                           target: LatLng(
-                            dGeo!.latitude,
-                            dGeo!.longitude,
+                            dGeo.latitude,
+                            dGeo.longitude,
                           ),
                           zoom: 14,
                         ),
