@@ -67,6 +67,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         dRides = value.docs[0]['trips'];
         dId = value.docs[0]['id'];
         dGeo = value.docs[0]['driverLocation'];
+
+        FirebaseFirestore.instance.collection('drivers').doc(dId).update({
+          'order_details': {
+            'source': widget.sourceLocationName,
+            'destination': widget.destinationName,
+            'truck': 'Large',
+          },
+        });
       }
       // for (var element in value.docs) {
       //   print(element['name']);
@@ -502,9 +510,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       FirebaseFirestore.instance
                           .collection('drivers')
                           .doc(dId)
-                          .update({
-                        "chosen": true,
-                      });
+                          .update({"chosen": true, "driver_free": false});
 
                       if (status == "true") {
                         // && !conditionMet
@@ -517,9 +523,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                     .doc(dId)
                                     .update({
                                   "driver_free": true,
-                                }).then((value) => {
-                                          drawRide(),
-                                        }));
+                                }));
 
                         // conditionMet = true;
                       }

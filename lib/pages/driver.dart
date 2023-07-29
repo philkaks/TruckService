@@ -180,6 +180,7 @@ class _Driver extends State<Driver> {
                   final data = snapshot.data!.data();
 
                   if (data != null) {
+                    // todo this is notifcation persists. need to correct it
                     if (data['chosen'] == true) {
                       NotificationService().showNotification(
                         title: "TruckService",
@@ -246,18 +247,19 @@ class _Driver extends State<Driver> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   InkWell(
+                                    splashColor: Colors.yellow,
                                     onTap: () {
                                       FirebaseFirestore.instance
                                           .collection('drivers')
                                           .doc(data['id'])
                                           .update({
-                                        "driver_free": false,
+                                        // "driver_free": false,
                                         'chosen': false,
                                       });
                                     },
                                     child: Chip(
                                       backgroundColor: Colors.green[100],
-                                      label: const Text('Start Trip'),
+                                      label: const Text('Accept Trip'),
                                       avatar: const Icon(Icons.forward_outlined,
                                           color: Colors.green),
                                     ),
@@ -267,6 +269,7 @@ class _Driver extends State<Driver> {
                                   //         4.4),
                                   const SizedBox(width: 10),
                                   InkWell(
+                                    splashColor: Colors.yellow,
                                     onTap: () {
                                       FirebaseFirestore.instance
                                           .collection('drivers')
@@ -287,6 +290,7 @@ class _Driver extends State<Driver> {
                                   const SizedBox(width: 10),
 
                                   InkWell(
+                                    splashColor: Colors.yellow,
                                     onTap: () {
                                       FirebaseFirestore.instance
                                           .collection('drivers')
@@ -349,9 +353,20 @@ class _Driver extends State<Driver> {
                                   Icons.reviews_outlined,
                                   color: Colors.blue,
                                 ),
-                                title: const Text("Read Your Reviews"),
-                                subtitle: const Text(
-                                    "From the people you've Worked on."),
+                                title: const Text("order-Details"),
+                                subtitle: data['driver_free']
+                                    ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text('\n  From:  ' +
+                                        data['order_details']['source']),
+                                    Text('\n  To:  ' +
+                                        data['order_details']['destination']),
+                                    Text('\n   Trucksize:  ' +
+                                        data['order_details']['truck']),
+                                  ],
+                                )
+                                    : const Text('No ogoing order'),
                                 onTap: () {
                                   drivername =
                                       data['name'].toString().toLowerCase();
