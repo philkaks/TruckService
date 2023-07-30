@@ -14,7 +14,6 @@ import 'package:upbox/services/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/local_notification_service.dart';
 import 'editdriver.dart';
-import 'reviews.dart';
 
 class Driver extends StatefulWidget {
   const Driver({super.key});
@@ -243,71 +242,120 @@ class _Driver extends State<Driver> {
                                         ),
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              Column(
                                 children: [
-                                  InkWell(
-                                    splashColor: Colors.yellow,
-                                    onTap: () {
-                                      FirebaseFirestore.instance
-                                          .collection('drivers')
-                                          .doc(data['id'])
-                                          .update({
-                                        // "driver_free": false,
-                                        'chosen': false,
-                                      });
-                                    },
-                                    child: Chip(
-                                      backgroundColor: Colors.green[100],
-                                      label: const Text('Accept Trip'),
-                                      avatar: const Icon(Icons.forward_outlined,
-                                          color: Colors.green),
-                                    ),
-                                  ),
-                                  // SizedBox(
-                                  //     width: MediaQuery.of(context).size.width /
-                                  //         4.4),
-                                  const SizedBox(width: 10),
-                                  InkWell(
-                                    splashColor: Colors.yellow,
-                                    onTap: () {
-                                      FirebaseFirestore.instance
-                                          .collection('drivers')
-                                          .doc(data['id'])
-                                          .update({
-                                        "driver_arrived": 'true',
-                                      });
-                                    },
-                                    child: Chip(
-                                      backgroundColor: Colors.blue[100],
-                                      label: const Text('Arrived'),
-                                      avatar: const Icon(
-                                          Icons.done_all_outlined,
-                                          color: Colors.blue),
-                                    ),
-                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                          splashColor: Colors.yellow,
+                                          onTap: () {
+                                            FirebaseFirestore.instance
+                                                .collection('drivers')
+                                                .doc(data['id'])
+                                                .update({
+                                              // "driver_free": false,
+                                              'chosen': false,
+                                              'trip_accepted': 'true',
+                                            });
+                                          },
+                                          child: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                            size: 30,
+                                          )),
+                                      const SizedBox(width: 20),
+                                      InkWell(
+                                        splashColor: Colors.yellow,
+                                        onTap: () {
+                                          FirebaseFirestore.instance
+                                              .collection('drivers')
+                                              .doc(data['id'])
+                                              .update({
+                                            // "driver_free": false,
+                                            'chosen': false,
+                                            'driver_free': false,
+                                            'trip_accepted': 'false',
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.cancel,
+                                          color: Colors.red,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      // SizedBox(
+                                      //     width: MediaQuery.of(context).size.width /
+                                      //         4.4),
+                                      const SizedBox(width: 10),
+                                      InkWell(
+                                        splashColor: Colors.yellow,
+                                        onTap: () {
+                                          FirebaseFirestore.instance
+                                              .collection('drivers')
+                                              .doc(data['id'])
+                                              .update({
+                                            "driver_arrived": 'true',
+                                          });
+                                        },
+                                        child: Chip(
+                                          backgroundColor: Colors.blue[100],
+                                          label: const Text('Arrived'),
+                                          avatar: const Icon(
+                                              Icons.done_all_outlined,
+                                              color: Colors.blue),
+                                        ),
+                                      ),
 
-                                  const SizedBox(width: 10),
+                                      const SizedBox(width: 10),
 
-                                  InkWell(
-                                    splashColor: Colors.yellow,
-                                    onTap: () {
-                                      FirebaseFirestore.instance
-                                          .collection('drivers')
-                                          .doc(data['id'])
-                                          .update({
-                                        "driver_arrived": 'complete',
-                                        // 'chosen': false,
-                                      });
-                                    },
-                                    child: Chip(
-                                      backgroundColor: Colors.red[100],
-                                      label: const Text('End Trip'),
-                                      avatar: const Icon(
-                                          Icons.stop_circle_outlined,
-                                          color: Colors.red),
-                                    ),
+                                      InkWell(
+                                        splashColor: Colors.yellow,
+                                        onTap: () {
+                                          FirebaseFirestore.instance
+                                              .collection('drivers')
+                                              .doc(data['id'])
+                                              .update({
+                                            "driver_arrived": 'complete',
+                                          });
+                                        },
+                                        child: Chip(
+                                          backgroundColor: Colors.red[100],
+                                          label: const Text('End Trip'),
+                                          avatar: const Icon(
+                                              Icons.stop_circle_outlined,
+                                              color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  const SizedBox(height: 10),
+                                  data['driver_free']
+                                      ? const Text('No ogoing order')
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Name: ' +
+                                                  data['order_details']
+                                                      ['customer_name'],
+                                            ),
+                                            Text(
+                                              'email: ' +
+                                                  data['order_details']
+                                                      ['customer_email'],
+                                            ),
+                                            Text(' From:  ' +
+                                                data['order_details']
+                                                    ['source']),
+                                            Text(' To:  ' +
+                                                data['order_details']
+                                                    ['destination']),
+                                            Text('   Trucksize:  ' +
+                                                data['order_details']['truck']),
+                                          ],
+                                        ),
                                 ],
                               )
                             ],
@@ -345,46 +393,34 @@ class _Driver extends State<Driver> {
                                   }
                                 },
                               ),
-                              const Divider(
-                                height: 10,
-                              ),
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.reviews_outlined,
-                                  color: Colors.blue,
-                                ),
-                                title: const Text("order-Details"),
-                                subtitle: data['driver_free']
-                                    ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('\n  From:  ' +
-                                        data['order_details']['source']),
-                                    Text('\n  To:  ' +
-                                        data['order_details']['destination']),
-                                    Text('\n   Trucksize:  ' +
-                                        data['order_details']['truck']),
-                                  ],
-                                )
-                                    : const Text('No ogoing order'),
-                                onTap: () {
-                                  drivername =
-                                      data['name'].toString().toLowerCase();
-                                  // print(drivername);
-                                  Navigator.of(context).push(
-                                    PageTransition(
-                                      child: ReviewsList(
-                                        driver: drivername,
-                                      ),
-                                      childCurrent: widget,
-                                      type: PageTransitionType.fade,
-                                      duration: const Duration(seconds: 0),
-                                      reverseDuration:
-                                          const Duration(seconds: 0),
-                                    ),
-                                  );
-                                },
-                              ),
+                              // const Divider(
+                              //   height: 10,
+                              // ),
+                              // ListTile(
+                              //   leading: const Icon(
+                              //     Icons.reviews_outlined,
+                              //     color: Colors.blue,
+                              //   ),
+                              //   title: const Text("order-Details"),
+                              //   // subtitle:
+                              //   onTap: () {
+                              //     drivername =
+                              //         data['name'].toString().toLowerCase();
+                              //     // print(drivername);
+                              //     Navigator.of(context).push(
+                              //       PageTransition(
+                              //         child: ReviewsList(
+                              //           driver: drivername,
+                              //         ),
+                              //         childCurrent: widget,
+                              //         type: PageTransitionType.fade,
+                              //         duration: const Duration(seconds: 0),
+                              //         reverseDuration:
+                              //             const Duration(seconds: 0),
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
                               const Divider(
                                 height: 10,
                               ),

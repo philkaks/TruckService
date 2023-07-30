@@ -3,6 +3,8 @@
 import 'dart:async';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -73,6 +75,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             'source': widget.sourceLocationName,
             'destination': widget.destinationName,
             'truck': 'Large',
+            'customer_name': FirebaseAuth.instance.currentUser!.displayName ?? '',
+            'customer_email': FirebaseAuth.instance.currentUser!.email ?? '',
           },
         });
       }
@@ -450,7 +454,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     getData(widget.sName);
     trackRide();
     getDis();
-    // pricePerTruck();
+    pricePerTruck();
     showDriverDetails();
 
     // ? these were replicates
@@ -507,10 +511,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       }
 
                       var status = snapshot.data!.docs[0]['driver_arrived'];
+                      var status2 = snapshot.data!.docs[0]['trip_accepted'];
                       FirebaseFirestore.instance
                           .collection('drivers')
                           .doc(dId)
                           .update({"chosen": true, "driver_free": false});
+
+                      if (status2 == "true") {
+                        NotificationService().showNotification(
+                            title: "TruckService",
+                            body: "Driver has accepted your request");
+                      }
+                      if (status2 == "false") {
+                        NotificationService().showNotification(
+                            title: "TruckService",
+                            body: "Driver has rejected your request");
+                      }
 
                       if (status == "true") {
                         // && !conditionMet

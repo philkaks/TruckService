@@ -36,10 +36,15 @@ class NotificationService {
         'channelName',
         importance: Importance.max,
         largeIcon: DrawableResourceAndroidBitmap('@mipmap/launcher_icon'),
+        timeoutAfter: 4000,
+        enableVibration: true,
+        playSound: true,
+        autoCancel: true,
       ),
       iOS: DarwinNotificationDetails(),
     );
   }
+
 
   Future showNotification(
       {int id = 0, String? title, String? body, String? payload}) async {
@@ -48,12 +53,13 @@ class NotificationService {
       title,
       body,
       await notificationDetails(),
+      
     );
   }
 
-  // Future<void> cancelNotification(int notificationId) async {
-  //   await notificationsPlugin.cancel(notificationId);
-  // }
+  Future<void> cancelNotification(int notificationId) async {
+    await notificationsPlugin.cancel(notificationId);
+  }
 
   // End of NotificationService class
 }

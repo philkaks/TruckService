@@ -67,6 +67,12 @@ class _SignUpScreenState extends State<AddInformation> {
           'rating': 0.0,
           'plateno': 'ABC-123',
           'state': 'kampala',
+          'trip_accepted': 'default',
+          'order_details': {
+            'source': '',
+            'destination':'',
+            'truck': '',
+          },
         });
       }
 
