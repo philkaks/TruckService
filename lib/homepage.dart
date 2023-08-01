@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/app_start.dart';
 import 'dart:ui' as ui;
 
+import 'pages/contact.dart';
 import 'tracking.dart';
 
 class HomePage extends StatelessWidget {
@@ -88,7 +89,12 @@ class HomePage extends StatelessWidget {
                     ElevatedCard(
                       subtitle: 'Reach out to us',
                       title: 'Contact Us',
-                      onTap: () => _onCardTapped(3),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ContactUsPage(),
+                        ),
+                      ),
                     ),
                     ElevatedCard(
                       title: 'Services',

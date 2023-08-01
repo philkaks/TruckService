@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:upbox/services/auth.dart';
 
 class TrackingPage extends StatefulWidget {
   const TrackingPage({super.key});
@@ -38,7 +35,8 @@ class _TrackingPageState extends State<TrackingPage> {
           title: const Center(
               child: Text(
             'Tracking ',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
           )),
         ),
         body: GoogleMap(
@@ -48,7 +46,7 @@ class _TrackingPageState extends State<TrackingPage> {
           compassEnabled: false,
           mapType: MapType.normal,
           initialCameraPosition: const CameraPosition(
-            target: LatLng(0, 0),
+            target: LatLng(0.3162800, 32.5821900),
             zoom: 14,
           ),
           onMapCreated: (GoogleMapController controller) {

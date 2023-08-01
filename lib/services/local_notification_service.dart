@@ -40,6 +40,7 @@ class NotificationService {
         enableVibration: true,
         playSound: true,
         autoCancel: true,
+        onlyAlertOnce: true
       ),
       iOS: DarwinNotificationDetails(),
     );
